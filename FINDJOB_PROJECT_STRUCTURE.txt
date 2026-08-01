@@ -1,0 +1,173 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║              FINDJOB - PROJECT STRUCTURE OVERVIEW                          ║
+║                      Ready for Spring Boot Development                     ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+findjob/                                    [Root Project Folder]
+│
+├── 📄 pom.xml                              [Maven Configuration ✅]
+│   └─ All dependencies included (Spring Boot, Thymeleaf, MySQL, JWT, etc.)
+│
+├── 📄 README.md                            [Quick Start Guide ✅]
+│   └─ 5-minute setup, commands, troubleshooting
+│
+├── 📄 .gitignore                           [Git Configuration ✅]
+│   └─ Java/Spring Boot/IDE ignores
+│
+├── 📁 src/
+│   │
+│   ├── 📁 main/
+│   │   ├── 📁 java/com/findjob/
+│   │   │   ├── 📄 FindJobApplication.java          [Main Entry Point ✅]
+│   │   │   │
+│   │   │   ├── 📁 model/                               [JPA Entities ✅]
+│   │   │   │   ├── 📄 User.java                         [Freelancer/Client]
+│   │   │   │   ├── 📄 Job.java                          [Job Postings]
+│   │   │   │   ├── 📄 Skill.java                        [Skills Database]
+│   │   │   │   ├── 📄 JobApplication.java               [Bids/Applications]
+│   │   │   │   ├── 📄 Review.java                       [Ratings]
+│   │   │   │   ├── 📄 Endorsement.java                  [Peer Verification]
+│   │   │   │   ├── 📄 Message.java                      [Direct Messaging]
+│   │   │   │   └── 📄 PortfolioItem.java                [Work Samples]
+│   │   │   │
+│   │   │   ├── 📁 controller/                           [To Be Built]
+│   │   │   │   ├── HomeController.java
+│   │   │   │   ├── AuthController.java
+│   │   │   │   ├── JobController.java
+│   │   │   │   ├── UserController.java
+│   │   │   │   ├── EndorsementController.java
+│   │   │   │   └── MessageController.java
+│   │   │   │
+│   │   │   ├── 📁 service/                              [To Be Built]
+│   │   │   │   ├── UserService.java
+│   │   │   │   ├── JobService.java
+│   │   │   │   ├── SkillService.java
+│   │   │   │   ├── EndorsementService.java
+│   │   │   │   ├── ReviewService.java
+│   │   │   │   └── MessageService.java
+│   │   │   │
+│   │   │   ├── 📁 repository/                           [To Be Built]
+│   │   │   │   ├── UserRepository.java
+│   │   │   │   ├── JobRepository.java
+│   │   │   │   ├── SkillRepository.java
+│   │   │   │   ├── JobApplicationRepository.java
+│   │   │   │   ├── ReviewRepository.java
+│   │   │   │   ├── EndorsementRepository.java
+│   │   │   │   └── MessageRepository.java
+│   │   │   │
+│   │   │   ├── 📁 dto/                                  [To Be Built]
+│   │   │   │   ├── UserDTO.java
+│   │   │   │   ├── JobDTO.java
+│   │   │   │   ├── ApplicationDTO.java
+│   │   │   │   └── ReviewDTO.java
+│   │   │   │
+│   │   │   ├── 📁 security/                             [To Be Built]
+│   │   │   │   ├── JwtTokenProvider.java
+│   │   │   │   ├── JwtAuthenticationFilter.java
+│   │   │   │   └── SecurityConfig.java
+│   │   │   │
+│   │   │   ├── 📁 config/                               [To Be Built]
+│   │   │   │   ├── WebConfig.java
+│   │   │   │   └── DatabaseConfig.java
+│   │   │   │
+│   │   │   ├── 📁 util/                                 [To Be Built]
+│   │   │   │   ├── DateUtil.java
+│   │   │   │   ├── ValidationUtil.java
+│   │   │   │   └── Constants.java
+│   │   │   │
+│   │   │   └── 📁 exception/                            [To Be Built]
+│   │   │       ├── ResourceNotFoundException.java
+│   │   │       ├── UnauthorizedException.java
+│   │   │       └── ValidationException.java
+│   │   │
+│   │   └── 📁 resources/
+│   │       ├── 📄 application.properties                [Configuration ✅]
+│   │       │   └─ Database, server, JWT, Thymeleaf settings
+│   │       │
+│   │       ├── 📁 templates/                            [Thymeleaf Templates - To Be Built]
+│   │       │   ├── 📁 layout/
+│   │       │   │   ├── base.html
+│   │       │   │   └── navbar.html
+│   │       │   ├── 📁 auth/
+│   │       │   │   ├── login.html
+│   │       │   │   └── register.html
+│   │       │   ├── 📁 jobs/
+│   │       │   │   ├── list.html
+│   │       │   │   ├── detail.html
+│   │       │   │   ├── post.html
+│   │       │   │   └── edit.html
+│   │       │   ├── 📁 profile/
+│   │       │   │   ├── view.html
+│   │       │   │   ├── edit.html
+│   │       │   │   └── portfolio.html
+│   │       │   ├── 📁 dashboard/
+│   │       │   │   ├── freelancer.html
+│   │       │   │   └── client.html
+│   │       │   ├── 📁 messages/
+│   │       │   │   ├── inbox.html
+│   │       │   │   └── thread.html
+│   │       │   ├── 📁 endorsements/
+│   │       │   │   └── manage.html
+│   │       │   └── index.html
+│   │       │
+│   │       └── 📁 static/                               [Static Assets - To Be Built]
+│   │           ├── 📁 css/
+│   │           │   ├── style.css
+│   │           │   ├── bootstrap.min.css
+│   │           │   └── responsive.css
+│   │           ├── 📁 js/
+│   │           │   ├── main.js
+│   │           │   ├── form-validation.js
+│   │           │   └── api-client.js
+│   │           └── 📁 images/
+│   │               ├── logo.png
+│   │               └── placeholders/
+│   │
+│   └── 📁 test/
+│       └── 📁 java/com/findjob/
+│           ├── 📁 controller/                           [To Be Built]
+│           ├── 📁 service/                              [To Be Built]
+│           └── 📁 repository/                           [To Be Built]
+│
+├── 📁 docs/
+│   └── 📄 DIRECTORY_STRUCTURE.md                        [Detailed Guide ✅]
+│       └─ Explains every folder and file in the project
+│
+└── 📊 Database Tables (Auto-created by Hibernate)
+    ├── users                    (Freelancers & Clients)
+    ├── jobs                     (Job Postings)
+    ├── skills                   (Available Skills)
+    ├── user_skill              (User-Skill Relationships)
+    ├── job_skill               (Job-Skill Requirements)
+    ├── job_applications        (Bids/Applications)
+    ├── reviews                 (Post-Project Ratings)
+    ├── endorsements            (Peer Endorsements)
+    ├── messages                (Direct Messaging)
+    └── portfolio_items         (Work Samples)
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                            LEGEND                                           ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║ ✅  = Completed & Ready to Use                                             ║
+║ To Be Built = Folder structure ready, files need implementation             ║
+║                                                                              ║
+║ TOTAL JAVA CLASSES: 8 JPA entities (DONE) + 30+ to build                   ║
+║ TOTAL TEMPLATES: 20+ to build                                              ║
+║ TOTAL STATIC FILES: CSS/JS/Images to add                                   ║
+║                                                                              ║
+║ DEVELOPMENT TIME: ~13-14 weeks (1 semester)                                ║
+║ START WITH: Creating Repositories → Services → Controllers                 ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+QUICK START CHECKLIST:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Extract findjob folder to ~/projects/
+2. Create postgres database:
+   CREATE DATABASE findjob;
+3. Edit application.properties with your DB credentials
+4. Build project:
+   mvn clean install
+5. Run application:
+   mvn spring-boot:run
+6. Access at: http://localhost:8080
