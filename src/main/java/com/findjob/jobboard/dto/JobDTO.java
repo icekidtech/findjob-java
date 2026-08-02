@@ -32,6 +32,9 @@ public class JobDTO {
     @NotBlank(message = "Budget type is required")
     private String budgetType; // FIXED or HOURLY
     
+    @NotBlank(message = "Currency is required")
+    private String currency; // USD, EUR, GBP, NGN, etc.
+    
     @DecimalMin(value = "0.1", message = "Minimum budget must be greater than 0")
     private BigDecimal budgetMin;
     

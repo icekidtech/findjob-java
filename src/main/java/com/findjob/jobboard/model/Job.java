@@ -75,6 +75,10 @@ public class Job {
     @Column(nullable = false)
     private BudgetType budgetType; // FIXED or HOURLY
     
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Currency currency = Currency.USD; // Currency for budget
+    
     @DecimalMin(value = "0.1", message = "Minimum budget must be greater than 0")
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal budgetMin;

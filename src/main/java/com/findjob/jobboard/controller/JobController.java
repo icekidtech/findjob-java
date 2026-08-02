@@ -207,6 +207,7 @@ public class JobController {
                 .description(jobDTO.getDescription())
                 .category(jobDTO.getCategory())
                 .budgetType(BudgetType.valueOf(jobDTO.getBudgetType()))
+                .currency(Currency.valueOf(jobDTO.getCurrency()))
                 .budgetMin(jobDTO.getBudgetMin())
                 .budgetMax(jobDTO.getBudgetMax())
                 .experienceLevel(JobExperienceLevel.valueOf(jobDTO.getExperienceLevel()))
