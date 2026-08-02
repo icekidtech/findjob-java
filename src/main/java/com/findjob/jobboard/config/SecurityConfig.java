@@ -53,8 +53,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable())
+                .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/about", "/faq", "/contact", "/auth/login", "/auth/register", "/auth/forgot-password", "/css/**", "/js/**", "/images/**", "/static/**").permitAll()
+                        .requestMatchers("/", "/about", "/faq", "/contact", "/auth/**", "/css/**", "/js/**", "/images/**", "/static/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -67,6 +69,11 @@ public class SecurityConfig {
                         .logoutUrl("/auth/logout")
                         .logoutSuccessUrl("/")
                         .permitAll()
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.sendRedirect("/auth/login");
+                        })
                 );
 
         return http.build();
