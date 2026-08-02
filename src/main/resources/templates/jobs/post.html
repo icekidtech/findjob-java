@@ -386,11 +386,10 @@
                         <div class="mb-4">
                             <label for="currency" class="form-label">Currency *</label>
                             <select class="form-select" id="currency" name="currency" required>
-                                <option value="">Select currency</option>
+                                <option value="NGN" selected>₦ - Nigerian Naira</option>
                                 <option value="USD">$ - US Dollar</option>
                                 <option value="EUR">€ - Euro</option>
                                 <option value="GBP">£ - British Pound</option>
-                                <option value="NGN">₦ - Nigerian Naira</option>
                                 <option value="CAD">C$ - Canadian Dollar</option>
                                 <option value="AUD">A$ - Australian Dollar</option>
                                 <option value="INR">₹ - Indian Rupee</option>
@@ -405,58 +404,35 @@
 
                         <!-- Budget Input (Fixed) -->
                         <div id="fixedBudgetSection">
-                            <div class="row">
-                                <div class="col-md-6 mb-4">
-                                    <label for="budgetMin" class="form-label">Minimum Budget *</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="currencySymbolMin">$</span>
-                                        <input type="number" class="form-control" id="budgetMin" name="budgetMin" 
-                                               placeholder="1000" min="0.1" step="0.01"
-                                               th:value="${jobDTO?.budgetMin}" required>
-                                    </div>
-                                    <small class="text-muted">Starting budget</small>
-                                    <div th:if="${#fields.hasErrors('budgetMin')}" class="text-danger small mt-1">
-                                        <i class="fas fa-times-circle"></i> <span th:errors="budgetMin"></span>
-                                    </div>
+                            <div class="mb-4">
+                                <label for="budget" class="form-label">Budget *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="currencySymbol">₦</span>
+                                    <input type="number" class="form-control" id="budget" name="budgetMin" 
+                                           placeholder="50000" min="0.1" step="0.01"
+                                           th:value="${jobDTO?.budgetMin}" required>
                                 </div>
-                                <div class="col-md-6 mb-4">
-                                    <label for="budgetMax" class="form-label">Maximum Budget *</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="currencySymbolMax">$</span>
-                                        <input type="number" class="form-control" id="budgetMax" name="budgetMax" 
-                                               placeholder="5000" min="0.1" step="0.01"
-                                               th:value="${jobDTO?.budgetMax}" required>
-                                    </div>
-                                    <small class="text-muted">Top budget range</small>
-                                    <div th:if="${#fields.hasErrors('budgetMax')}" class="text-danger small mt-1">
-                                        <i class="fas fa-times-circle"></i> <span th:errors="budgetMax"></span>
-                                    </div>
+                                <small class="text-muted">Total project budget</small>
+                                <div th:if="${#fields.hasErrors('budgetMin')}" class="text-danger small mt-1">
+                                    <i class="fas fa-times-circle"></i> <span th:errors="budgetMin"></span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Budget Input (Hourly) -->
                         <div id="hourlyBudgetSection" style="display: none;">
-                            <div class="row">
-                                <div class="col-md-6 mb-4">
-                                    <label for="budgetMin" class="form-label">Minimum Hourly Rate *</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="currencySymbolHourlyMin">$</span>
-                                        <input type="number" class="form-control" id="budgetMinHourly" name="budgetMin" 
-                                               placeholder="25" min="0.1" step="0.01"
-                                               th:value="${jobDTO?.budgetMin}" required>
-                                        <span class="input-group-text">/hr</span>
-                                    </div>
+                            <div class="mb-4">
+                                <label for="budgetHourly" class="form-label">Hourly Rate *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="currencySymbolHourly">₦</span>
+                                    <input type="number" class="form-control" id="budgetHourly" name="budgetMin" 
+                                           placeholder="5000" min="0.1" step="0.01"
+                                           th:value="${jobDTO?.budgetMin}" required>
+                                    <span class="input-group-text">/hr</span>
                                 </div>
-                                <div class="col-md-6 mb-4">
-                                    <label for="budgetMax" class="form-label">Maximum Hourly Rate *</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="currencySymbolHourlyMax">$</span>
-                                        <input type="number" class="form-control" id="budgetMaxHourly" name="budgetMax" 
-                                               placeholder="75" min="0.1" step="0.01"
-                                               th:value="${jobDTO?.budgetMax}" required>
-                                        <span class="input-group-text">/hr</span>
-                                    </div>
+                                <small class="text-muted">Rate per hour</small>
+                                <div th:if="${#fields.hasErrors('budgetMin')}" class="text-danger small mt-1">
+                                    <i class="fas fa-times-circle"></i> <span th:errors="budgetMin"></span>
                                 </div>
                             </div>
                         </div>
@@ -597,11 +573,9 @@
         
         // Update currency symbols
         document.getElementById('currency').addEventListener('change', function() {
-            const symbol = currencySymbols[this.value] || '$';
-            document.getElementById('currencySymbolMin').textContent = symbol;
-            document.getElementById('currencySymbolMax').textContent = symbol;
-            document.getElementById('currencySymbolHourlyMin').textContent = symbol;
-            document.getElementById('currencySymbolHourlyMax').textContent = symbol;
+            const symbol = currencySymbols[this.value] || '₦';
+            document.getElementById('currencySymbol').textContent = symbol;
+            document.getElementById('currencySymbolHourly').textContent = symbol;
         });
         
         // Budget type toggle

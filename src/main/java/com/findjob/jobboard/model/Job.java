@@ -77,7 +77,7 @@ public class Job {
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Currency currency = Currency.USD; // Currency for budget
+    private Currency currency = Currency.NGN; // Currency for budget (default: Nigerian Naira)
     
     @DecimalMin(value = "0.1", message = "Minimum budget must be greater than 0")
     @Column(nullable = false, precision = 12, scale = 2)
