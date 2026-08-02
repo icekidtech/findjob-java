@@ -160,24 +160,45 @@ public class JobController {
             Model model,
             RedirectAttributes redirectAttributes) {
         
+        System.out.println("=== JOB POSTING ATTEMPT ===");
+        System.out.println("Authentication: " + (authentication != null ? authentication.getName() : "NULL"));
+        System.out.println("Is Authenticated: " + (authentication != null && authentication.isAuthenticated()));
+        
         if (authentication == null || !authentication.isAuthenticated()) {
+            System.out.println("ERROR: User not authenticated!");
             return "redirect:/auth/login";
         }
         
         try {
+            System.out.println("Fetching user by email: " + authentication.getName());
             User client = userService.findByEmail(authentication.getName());
             
+            System.out.println("User found: " + (client != null ? client.getEmail() : "NULL"));
+            if (client != null) {
+                System.out.println("User ID: " + client.getId());
+                System.out.println("Is Client: " + client.isClient());
+            }
+            
             if (client == null || !client.isClient()) {
+                System.out.println("ERROR: User is null or not a client!");
                 redirectAttributes.addFlashAttribute("error", "Only clients can post jobs");
                 return "redirect:/dashboard";
             }
             
             if (bindingResult.hasErrors()) {
+                System.out.println("ERROR: Binding result has errors!");
+                bindingResult.getAllErrors().forEach(error -> 
+                    System.out.println("  - " + error.getDefaultMessage())
+                );
                 model.addAttribute("title", "Post a Job");
                 model.addAttribute("budgetTypes", BudgetType.values());
                 model.addAttribute("experienceLevels", JobExperienceLevel.values());
                 return "jobs/post";
             }
+            
+            System.out.println("Creating job with title: " + jobDTO.getTitle());
+            System.out.println("Budget: " + jobDTO.getBudgetMin() + " - " + jobDTO.getBudgetMax() + " (" + jobDTO.getBudgetType() + ")");
+            System.out.println("Experience Level: " + jobDTO.getExperienceLevel());
             
             // Create job from DTO
             Job job = Job.builder()
@@ -195,7 +216,11 @@ public class JobController {
                 .jobStatus(JobStatus.OPEN)
                 .build();
             
+            System.out.println("Saving job to database...");
             Job savedJob = jobService.createJob(job);
+            
+            System.out.println("Job saved successfully! Job ID: " + savedJob.getId());
+            System.out.println("Redirecting to: /jobs/" + savedJob.getId());
             
             redirectAttributes.addFlashAttribute("success", 
                 "Job posted successfully! Check out your job dashboard.");
@@ -203,6 +228,8 @@ public class JobController {
             return "redirect:/jobs/" + savedJob.getId();
             
         } catch (Exception e) {
+            System.out.println("ERROR during job posting: " + e.getMessage());
+            e.printStackTrace();
             model.addAttribute("error", "Failed to post job: " + e.getMessage());
             model.addAttribute("title", "Post a Job");
             return "jobs/post";
