@@ -19,6 +19,7 @@ out/
 *.zip
 bin/
 
+
 # Maven
 pom.xml.tag
 pom.xml.releaseBackup
