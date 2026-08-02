@@ -290,7 +290,7 @@
                 </div>
 
                 <!-- Job Details Section -->
-                <form th:action="@{/jobs/post}" method="POST" id="jobForm">
+                <form th:action="@{/jobs/post}" method="POST" id="jobForm" th:object="${jobDTO}">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                     
                     <!-- Error Messages Display -->
@@ -312,11 +312,11 @@
                             <label for="title" class="form-label">Job Title *</label>
                             <input type="text" class="form-control" id="title" name="title" 
                                    placeholder="e.g., Build a responsive website" 
-                                   th:value="${jobDTO?.title}"
+                                   th:value="*{title}"
                                    required>
                             <small class="helper-text">Make it clear and specific about what you need done (minimum 5 characters)</small>
                             <div th:if="${#fields.hasErrors('title')}" class="text-danger small mt-1">
-                                <i class="fas fa-times-circle"></i> <span th:errors="title"></span>
+                                <i class="fas fa-times-circle"></i> <span th:errors="*{title}"></span>
                             </div>
                         </div>
 
@@ -346,12 +346,12 @@
                             <label for="description" class="form-label">Job Description *</label>
                             <textarea class="form-control" id="description" name="description" 
                                       rows="6" placeholder="Describe your project in detail..." 
-                                      th:text="${jobDTO?.description}"
+                                      th:text="*{description}"
                                       required></textarea>
                             <div class="char-count"><span id="charCount">0</span>/5000 characters</div>
                             <small class="helper-text">Be detailed. The more information you provide, the better proposals you'll receive (minimum 20 characters)</small>
                             <div th:if="${#fields.hasErrors('description')}" class="text-danger small mt-1">
-                                <i class="fas fa-times-circle"></i> <span th:errors="description"></span>
+                                <i class="fas fa-times-circle"></i> <span th:errors="*{description}"></span>
                             </div>
                         </div>
                     </div>
@@ -398,7 +398,7 @@
                             </select>
                             <small class="helper-text">Choose the currency for your budget</small>
                             <div th:if="${#fields.hasErrors('currency')}" class="text-danger small mt-1">
-                                <i class="fas fa-times-circle"></i> <span th:errors="currency"></span>
+                                <i class="fas fa-times-circle"></i> <span th:errors="*{currency}"></span>
                             </div>
                         </div>
 
@@ -410,11 +410,11 @@
                                     <span class="input-group-text" id="currencySymbol">₦</span>
                                     <input type="number" class="form-control" id="budget" name="budgetMin" 
                                            placeholder="50000" min="0.1" step="0.01"
-                                           th:value="${jobDTO?.budgetMin}" required>
+                                           th:value="*{budgetMin}" required>
                                 </div>
                                 <small class="text-muted">Total project budget</small>
                                 <div th:if="${#fields.hasErrors('budgetMin')}" class="text-danger small mt-1">
-                                    <i class="fas fa-times-circle"></i> <span th:errors="budgetMin"></span>
+                                    <i class="fas fa-times-circle"></i> <span th:errors="*{budgetMin}"></span>
                                 </div>
                             </div>
                         </div>
@@ -427,12 +427,12 @@
                                     <span class="input-group-text" id="currencySymbolHourly">₦</span>
                                     <input type="number" class="form-control" id="budgetHourly" name="budgetMin" 
                                            placeholder="5000" min="0.1" step="0.01"
-                                           th:value="${jobDTO?.budgetMin}" required>
+                                           th:value="*{budgetMin}" required>
                                     <span class="input-group-text">/hr</span>
                                 </div>
                                 <small class="text-muted">Rate per hour</small>
                                 <div th:if="${#fields.hasErrors('budgetMin')}" class="text-danger small mt-1">
-                                    <i class="fas fa-times-circle"></i> <span th:errors="budgetMin"></span>
+                                    <i class="fas fa-times-circle"></i> <span th:errors="*{budgetMin}"></span>
                                 </div>
                             </div>
                         </div>
