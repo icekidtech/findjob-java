@@ -290,7 +290,7 @@
                 </div>
 
                 <!-- Job Details Section -->
-                <form th:action="@{/jobs/create}" method="POST" id="jobForm">
+                <form th:action="@{/jobs/post}" method="POST" id="jobForm">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                     
                     <div class="form-card">

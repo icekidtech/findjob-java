@@ -127,20 +127,28 @@ public class AuthController {
         }
         
         try {
+            System.out.println("=== REGISTRATION ATTEMPT ===");
+            System.out.println("Email: " + registerRequest.getEmail());
+            System.out.println("Name: " + registerRequest.getFirstName() + " " + registerRequest.getLastName());
+            System.out.println("Role: " + registerRequest.getRole());
+            
             // Check if email already exists
             if (userService.findByEmail(registerRequest.getEmail()) != null) {
+                System.out.println("Email already exists!");
                 model.addAttribute("error", "Email already registered");
                 return "auth/register";
             }
             
             // Validate passwords match
             if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
+                System.out.println("Passwords don't match!");
                 model.addAttribute("error", "Passwords do not match");
                 return "auth/register";
             }
             
             // Validate password length
             if (registerRequest.getPassword().length() < 8) {
+                System.out.println("Password too short!");
                 model.addAttribute("error", "Password must be 8 characters or longer");
                 return "auth/register";
             }
@@ -158,15 +166,21 @@ public class AuthController {
             newUser.setTierLevel("BEGINNER");
             newUser.setTotalProjects(0);
             
+            System.out.println("Saving user...");
+            
             // Save user
             User savedUser = userService.save(newUser);
+            System.out.println("User saved with ID: " + savedUser.getId());
             
             // Verify user was saved before attempting authentication
             User verifiedUser = userService.findByEmail(registerRequest.getEmail());
             if (verifiedUser == null) {
+                System.out.println("ERROR: User not found after save!");
                 model.addAttribute("error", "Failed to create account. Please try again.");
                 return "auth/register";
             }
+            
+            System.out.println("User verified in database!");
             
             // Auto-login user after registration
             Authentication authentication = authenticationManager.authenticate(
@@ -181,13 +195,18 @@ public class AuthController {
             redirectAttributes.addFlashAttribute("success", 
                 "Account created successfully! Welcome to FindJob.");
             
+            System.out.println("User authenticated and redirected!");
+            
             // Redirect to complete profile
             return "redirect:/profile/complete";
             
         } catch (IllegalArgumentException e) {
+            System.out.println("Invalid role: " + e.getMessage());
             model.addAttribute("error", "Invalid role selected");
             return "auth/register";
         } catch (Exception e) {
+            System.out.println("Registration error: " + e.getMessage());
+            e.printStackTrace();
             model.addAttribute("error", "Registration failed: " + e.getMessage());
             return "auth/register";
         }
