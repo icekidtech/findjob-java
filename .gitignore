@@ -1,2 +1,66 @@
+# IDE
 .kiro/
 .vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+*.sublime-workspace
+*.sublime-project
+
+# Build & Dependencies
+target/
+build/
+out/
+.gradle/
+*.jar
+*.war
+*.rar
+*.zip
+bin/
+
+# Maven
+pom.xml.tag
+pom.xml.releaseBackup
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Compiled Java
+*.class
+*.jar
+*.exe
+*.o
+*.so
+
+# Logs
+logs/
+*.log
+log.txt
+.DS_Store
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+application-local.properties
+application-prod.properties
+
+# Upload & Temp
+uploads/
+temp/
+tmp/
+
+# Runtime
+.classpath
+.project
+.settings/
+*.swp
+*.swo
+*~

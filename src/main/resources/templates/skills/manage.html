@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Skills - FindJob</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        
+        .skill-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .skill-info {
+            flex: 1;
+        }
+        
+        .skill-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .skill-category {
+            font-size: 12px;
+            background: #e7e7ff;
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        
+        .skill-endorsements {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .endorsement-count {
+            text-align: center;
+        }
+        
+        .endorsement-badge {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .endorsement-label {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .verified-badge {
+            background: #d4edda;
+            color: #155724;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .btn-remove {
+            background: #f8d7da;
+            color: #721c24;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn-remove:hover {
+            background: #f5c6cb;
+        }
+        
+        .add-skill-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .skill-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
+        }
+        
+        .empty-state i {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">
+                <i class="fas fa-briefcase"></i> FindJob
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/profile}">Profile</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <h1 class="display-6 fw-bold mb-2">Manage Your Skills</h1>
+            <p class="lead mb-0">Add skills to your profile and get endorsed by others</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <!-- Add Skill Section -->
+                <div class="add-skill-section">
+                    <h4 class="mb-4"><i class="fas fa-plus-circle"></i> Add New Skill</h4>
+                    
+                    <form id="addSkillForm" class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Skill Name</label>
+                            <select class="form-select" id="skillSelect" required>
+                                <option value="">Select a skill...</option>
+                                <optgroup label="Programming">
+                                    <option value="1">Java</option>
+                                    <option value="2">Python</option>
+                                    <option value="3">JavaScript</option>
+                                    <option value="4">C++</option>
+                                    <option value="5">React</option>
+                                    <option value="6">Angular</option>
+                                </optgroup>
+                                <optgroup label="Design">
+                                    <option value="7">UI Design</option>
+                                    <option value="8">UX Design</option>
+                                    <option value="9">Figma</option>
+                                    <option value="10">Adobe XD</option>
+                                </optgroup>
+                                <optgroup label="Other">
+                                    <option value="11">Project Management</option>
+                                    <option value="12">SEO</option>
+                                    <option value="13">Content Writing</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-plus"></i> Add Skill
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Current Skills -->
+                <div class="mb-4">
+                    <div class="skill-list-header">
+                        <h4><i class="fas fa-star"></i> Your Skills</h4>
+                        <small class="text-muted" th:if="${userSkills != null}" th:text="'Total: ' + ${userSkills.size()}">Total: 0</small>
+                    </div>
+
+                    <!-- Skills List -->
+                    <div th:if="${userSkills != null and userSkills.size() > 0}">
+                        <div class="skill-card" th:each="userSkill : ${userSkills}">
+                            <div class="skill-info">
+                                <div class="skill-name" th:text="${userSkill.getSkill().getName()}">Skill Name</div>
+                                <span class="skill-category" th:text="${userSkill.getSkill().getCategory()}">Category</span>
+                            </div>
+                            
+                            <div class="skill-endorsements">
+                                <div class="endorsement-count">
+                                    <div class="endorsement-badge" th:text="${userSkill.getEndorsementCount()}">0</div>
+                                    <div class="endorsement-label">Endorsements</div>
+                                </div>
+                                
+                                <div th:if="${userSkill.getSkill().isVerified()}">
+                                    <span class="verified-badge">
+                                        <i class="fas fa-check-circle"></i> Verified
+                                    </span>
+                                </div>
+                                
+                                <button class="btn-remove" onclick="removeSkill(this)" th:data-id="${userSkill.getId()}">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div class="empty-state" th:if="${userSkills == null or userSkills.size() == 0}">
+                        <i class="fas fa-tag"></i>
+                        <h5>No skills added yet</h5>
+                        <p class="text-muted">Start by adding your first skill to showcase your expertise</p>
+                    </div>
+                </div>
+
+                <!-- Endorsements Received -->
+                <div class="mb-4">
+                    <h4 class="mb-4"><i class="fas fa-handshake"></i> Endorsements Received</h4>
+                    
+                    <div th:if="${recentEndorsements != null and recentEndorsements.size() > 0}">
+                        <div class="skill-card" th:each="endorsement : ${recentEndorsements}">
+                            <div class="skill-info">
+                                <div style="font-size: 14px; color: #999; margin-bottom: 8px;">
+                                    <strong th:text="${endorsement.getEndorser().getFirstName() + ' ' + endorsement.getEndorser().getLastName()}">User Name</strong> 
+                                    endorsed your <strong th:text="${endorsement.getSkill().getName()}">skill</strong>
+                                </div>
+                                <small class="text-muted" th:text="'on ' + ${#temporals.format(endorsement.getCreatedAt(), 'MMM dd, yyyy')}">Date</small>
+                            </div>
+                            
+                            <div>
+                                <span class="badge bg-light text-dark" th:text="${endorsement.getEndorsementType()}">Type</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="empty-state" th:if="${recentEndorsements == null or recentEndorsements.size() == 0}">
+                        <i class="fas fa-smile"></i>
+                        <h5>No endorsements yet</h5>
+                        <p class="text-muted">Keep working on your skills and others will start endorsing you!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function removeSkill(button) {
+            const skillId = button.getAttribute('data-id');
+            if (confirm('Are you sure you want to remove this skill?')) {
+                fetch(`/skills/${skillId}/remove`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        button.closest('.skill-card').remove();
+                    }
+                });
+            }
+        }
+        
+        document.getElementById('addSkillForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const skillId = document.getElementById('skillSelect').value;
+            
+            fetch('/skills/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ skillId: skillId })
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

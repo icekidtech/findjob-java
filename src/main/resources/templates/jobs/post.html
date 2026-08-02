@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Job - FindJob</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .post-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 40px;
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title i {
+            color: #667eea;
+            font-size: 24px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .form-control, .form-select {
+            border: 2px solid #e0e0e0;
+            padding: 12px 16px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+        }
+        
+        .helper-text {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        .budget-toggle {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .budget-option {
+            flex: 1;
+        }
+        
+        .budget-option input[type="radio"] {
+            display: none;
+        }
+        
+        .budget-option label {
+            display: block;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0;
+        }
+        
+        .budget-option input[type="radio"]:checked + label {
+            border-color: #667eea;
+            background: #f0f5ff;
+        }
+        
+        .skill-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .skill-input-group input {
+            flex: 1;
+        }
+        
+        .skill-tag {
+            display: inline-block;
+            background: #e7f1ff;
+            color: #667eea;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .skill-tag .remove {
+            cursor: pointer;
+            margin-left: 6px;
+        }
+        
+        .preview-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .preview-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .preview-item:last-child {
+            border-bottom: none;
+        }
+        
+        .preview-label {
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .preview-value {
+            color: #333;
+        }
+        
+        .char-count {
+            font-size: 12px;
+            color: #999;
+            text-align: right;
+            margin-top: 5px;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 40px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            color: white;
+        }
+        
+        .step-indicator {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        
+        .step.active .step-number {
+            background: #764ba2;
+        }
+        
+        .step.completed .step-number {
+            background: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" th:href="@{/}">
+                <i class="fas fa-briefcase"></i> FindJob
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i> Profile
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/profile}">View Profile</a></li>
+                            <li><a class="dropdown-item" th:href="@{/profile/edit}">Edit Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/auth/logout}" method="POST" style="display:inline;">
+                                    <button class="dropdown-item" type="submit">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="post-header">
+        <div class="container">
+            <h1 class="display-5 fw-bold mb-3">Post a New Job</h1>
+            <p class="lead mb-0">Find the right freelancer for your project</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Step Indicator -->
+                <div class="step-indicator mb-5">
+                    <div class="step active">
+                        <div class="step-number">1</div>
+                        <div>
+                            <h6 style="margin: 0; font-weight: 600;">Job Details</h6>
+                            <small class="text-muted">Basic information</small>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div>
+                            <h6 style="margin: 0; font-weight: 600;">Requirements</h6>
+                            <small class="text-muted">Skills & experience</small>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div>
+                            <h6 style="margin: 0; font-weight: 600;">Review & Post</h6>
+                            <small class="text-muted">Finalize & publish</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job Details Section -->
+                <form th:action="@{/jobs/create}" method="POST" id="jobForm">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    
+                    <div class="form-card">
+                        <h3 class="section-title">
+                            <i class="fas fa-briefcase"></i> Job Details
+                        </h3>
+
+                        <!-- Job Title -->
+                        <div class="mb-4">
+                            <label for="title" class="form-label">Job Title *</label>
+                            <input type="text" class="form-control" id="title" name="title" 
+                                   placeholder="e.g., Build a responsive website" required>
+                            <small class="helper-text">Make it clear and specific about what you need done</small>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label for="category" class="form-label">Category *</label>
+                                <select class="form-select" id="category" name="category" required>
+                                    <option value="">Select a category</option>
+                                    <option value="web-development">Web Development</option>
+                                    <option value="mobile-development">Mobile Development</option>
+                                    <option value="design">Design</option>
+                                    <option value="writing">Writing</option>
+                                    <option value="data-entry">Data Entry</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="location" class="form-label">Location</label>
+                                <input type="text" class="form-control" id="location" name="location" 
+                                       placeholder="e.g., Remote, New York, etc.">
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-4">
+                            <label for="description" class="form-label">Job Description *</label>
+                            <textarea class="form-control" id="description" name="description" 
+                                      rows="6" placeholder="Describe your project in detail..." required></textarea>
+                            <div class="char-count"><span id="charCount">0</span>/2000 characters</div>
+                            <small class="helper-text">Be detailed. The more information you provide, the better proposals you'll receive</small>
+                        </div>
+                    </div>
+
+                    <!-- Budget Section -->
+                    <div class="form-card">
+                        <h3 class="section-title">
+                            <i class="fas fa-money-bill"></i> Budget
+                        </h3>
+
+                        <!-- Budget Type Selection -->
+                        <div class="budget-toggle">
+                            <div class="budget-option">
+                                <input type="radio" id="budgetFixed" name="budgetType" value="FIXED" checked>
+                                <label for="budgetFixed">
+                                    <i class="fas fa-tag"></i><br>
+                                    <strong>Fixed Price</strong><br>
+                                    <small>Project has a set budget</small>
+                                </label>
+                            </div>
+                            <div class="budget-option">
+                                <input type="radio" id="budgetHourly" name="budgetType" value="HOURLY">
+                                <label for="budgetHourly">
+                                    <i class="fas fa-clock"></i><br>
+                                    <strong>Hourly Rate</strong><br>
+                                    <small>Pay based on hours worked</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Budget Input (Fixed) -->
+                        <div id="fixedBudgetSection">
+                            <label for="budget" class="form-label">Budget *</label>
+                            <div class="input-group mb-4">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="budget" name="budget" 
+                                       placeholder="5000" min="1">
+                            </div>
+                        </div>
+
+                        <!-- Budget Input (Hourly) -->
+                        <div id="hourlyBudgetSection" style="display: none;">
+                            <label for="hourlyRate" class="form-label">Hourly Rate *</label>
+                            <div class="input-group mb-4">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="hourlyRate" name="hourlyRate" 
+                                       placeholder="50" min="1">
+                                <span class="input-group-text">/hr</span>
+                            </div>
+                        </div>
+
+                        <!-- Experience Level -->
+                        <div class="mb-4">
+                            <label for="experienceLevel" class="form-label">Experience Level *</label>
+                            <select class="form-select" id="experienceLevel" name="experienceLevel" required>
+                                <option value="">Select experience level</option>
+                                <option value="BEGINNER">Beginner</option>
+                                <option value="INTERMEDIATE">Intermediate</option>
+                                <option value="EXPERT">Expert</option>
+                            </select>
+                            <small class="helper-text">This helps attract freelancers with the right skill level</small>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Section -->
+                    <div class="form-card">
+                        <h3 class="section-title">
+                            <i class="fas fa-calendar"></i> Timeline
+                        </h3>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="startDate" class="form-label">Desired Start Date *</label>
+                                <input type="date" class="form-control" id="startDate" name="startDate" required>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label for="deadline" class="form-label">Deadline *</label>
+                                <input type="date" class="form-control" id="deadline" name="deadline" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Skills Section -->
+                    <div class="form-card">
+                        <h3 class="section-title">
+                            <i class="fas fa-star"></i> Required Skills
+                        </h3>
+
+                        <div class="skill-input-group">
+                            <input type="text" class="form-control" id="skillInput" 
+                                   placeholder="Type a skill and press Enter">
+                            <button type="button" class="btn btn-outline-primary" id="addSkillBtn">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
+
+                        <div id="skillsList">
+                            <span class="skill-tag">
+                                HTML5 <span class="remove" onclick="this.parentElement.remove();">×</span>
+                            </span>
+                            <span class="skill-tag">
+                                CSS3 <span class="remove" onclick="this.parentElement.remove();">×</span>
+                            </span>
+                            <span class="skill-tag">
+                                JavaScript <span class="remove" onclick="this.parentElement.remove();">×</span>
+                            </span>
+                        </div>
+                        <small class="helper-text d-block mt-3">Add the skills you're looking for in freelancers</small>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-card" style="background: #f8f9fa; border-top: 2px solid #667eea;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a th:href="@{/dashboard}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-submit">
+                                <i class="fas fa-check"></i> Post Job
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Sidebar - Tips -->
+            <div class="col-lg-4">
+                <div class="form-card" style="position: sticky; top: 100px;">
+                    <h5 style="margin-bottom: 20px;">
+                        <i class="fas fa-lightbulb"></i> Tips for Success
+                    </h5>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h6 style="font-size: 14px; font-weight: 600; color: #333;">Clear Title</h6>
+                        <p style="font-size: 13px; color: #666; margin: 0;">Use descriptive titles that tell freelancers exactly what you need</p>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h6 style="font-size: 14px; font-weight: 600; color: #333;">Detailed Description</h6>
+                        <p style="font-size: 13px; color: #666; margin: 0;">Provide context, requirements, and deliverables clearly</p>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h6 style="font-size: 14px; font-weight: 600; color: #333;">Fair Budget</h6>
+                        <p style="font-size: 13px; color: #666; margin: 0;">Competitive budgets attract more qualified freelancers</p>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h6 style="font-size: 14px; font-weight: 600; color: #333;">Specific Skills</h6>
+                        <p style="font-size: 13px; color: #666; margin: 0;">List exact skills you need to get better matches</p>
+                    </div>
+
+                    <div style="padding-top: 20px; border-top: 1px solid #eee;">
+                        <p style="font-size: 12px; color: #999; margin: 0;">
+                            <strong>Pro Tip:</strong> The more details you provide, the better quality proposals you'll receive!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <p class="small mb-0">&copy; 2026 FindJob. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Budget type toggle
+        document.getElementById('budgetFixed').addEventListener('change', function() {
+            document.getElementById('fixedBudgetSection').style.display = 'block';
+            document.getElementById('hourlyBudgetSection').style.display = 'none';
+        });
+        
+        document.getElementById('budgetHourly').addEventListener('change', function() {
+            document.getElementById('fixedBudgetSection').style.display = 'none';
+            document.getElementById('hourlyBudgetSection').style.display = 'block';
+        });
+        
+        // Character counter
+        document.getElementById('description').addEventListener('input', function() {
+            document.getElementById('charCount').textContent = this.value.length;
+        });
+        
+        // Add skill
+        document.getElementById('addSkillBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const input = document.getElementById('skillInput');
+            if (input.value.trim()) {
+                const skillTag = document.createElement('span');
+                skillTag.className = 'skill-tag';
+                skillTag.innerHTML = input.value + ' <span class="remove" onclick="this.parentElement.remove();">×</span>';
+                document.getElementById('skillsList').appendChild(skillTag);
+                input.value = '';
+            }
+        });
+    </script>
+</body>
+</html>

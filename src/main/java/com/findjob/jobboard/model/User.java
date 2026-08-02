@@ -95,7 +95,7 @@ public class User {
     // Reputation & Tier System
     // ==========================================
     
-    @Column(precision = 3, scale = 2, nullable = false)
+    @Column(nullable = false)
     private Double reputationScore = 0.0; // 1.0 to 5.0
     
     @Column(length = 20, nullable = false)

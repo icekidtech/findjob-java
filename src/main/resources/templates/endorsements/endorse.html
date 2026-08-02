@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endorse Skills - FindJob</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        
+        .profile-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 48px;
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .profile-title {
+            color: #999;
+            margin-bottom: 15px;
+        }
+        
+        .skill-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .skill-info {
+            flex: 1;
+        }
+        
+        .skill-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .skill-category {
+            font-size: 12px;
+            background: #e7e7ff;
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        
+        .skill-stats {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .btn-endorse {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .btn-endorse:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-endorse.endorsed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .skills-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-state i {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">
+                <i class="fas fa-briefcase"></i> FindJob
+            </a>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <h1 class="display-6 fw-bold mb-2">Endorse Skills</h1>
+            <p class="lead mb-0">Help others recognize their expertise</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <!-- Search for User -->
+                <div class="profile-card">
+                    <h5 class="mb-3">Search for a freelancer to endorse</h5>
+                    <form class="d-flex gap-2">
+                        <input type="text" class="form-control" placeholder="Enter freelancer name or email..." id="searchUser">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </form>
+                </div>
+
+                <!-- User Profile (if selected) -->
+                <div class="profile-card" th:if="${freelancer != null}">
+                    <div class="profile-pic">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="profile-name" th:text="${freelancer.getFullName()}">John Doe</div>
+                    <div class="profile-title" th:text="${freelancer.getHeadline()}">Full Stack Developer</div>
+                    <p class="text-muted small" th:text="${freelancer.getBio()}">Bio goes here...</p>
+                    
+                    <div class="row text-center mt-3">
+                        <div class="col-4">
+                            <strong th:text="${freelancer.getTotalProjects()}">0</strong>
+                            <div class="small text-muted">Projects</div>
+                        </div>
+                        <div class="col-4">
+                            <strong th:text="${freelancer.getTotalReviews()}">0</strong>
+                            <div class="small text-muted">Reviews</div>
+                        </div>
+                        <div class="col-4">
+                            <strong th:text="${#numbers.formatDecimal(freelancer.getReputationScore(), 1, 1)}">0</strong>
+                            <div class="small text-muted">Rating</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills to Endorse -->
+                <div class="skills-section" th:if="${freelancer != null}">
+                    <h4 class="mb-4">
+                        <i class="fas fa-handshake"></i> Endorse Skills
+                    </h4>
+
+                    <div th:if="${freelancerSkills != null and freelancerSkills.size() > 0}">
+                        <div class="skill-card" th:each="skill : ${freelancerSkills}">
+                            <div class="skill-info">
+                                <div class="skill-name" th:text="${skill.getName()}">Skill Name</div>
+                                <span class="skill-category" th:text="${skill.getCategory()}">Category</span>
+                            </div>
+                            
+                            <div class="skill-stats">
+                                <div class="stat-item">
+                                    <div class="stat-number" th:text="${skill.getEndorsementCount()}">0</div>
+                                    <div class="stat-label">Endorsements</div>
+                                </div>
+                                
+                                <button type="button" class="btn-endorse" onclick="endorseSkill(this)" 
+                                    th:data-skill-id="${skill.getId()}" th:data-user-id="${freelancer.getId()}">
+                                    <i class="fas fa-thumbs-up"></i> Endorse
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="empty-state" th:if="${freelancerSkills == null or freelancerSkills.size() == 0}">
+                        <i class="fas fa-inbox"></i>
+                        <h5>No skills to endorse</h5>
+                        <p class="text-muted">This freelancer hasn't added any skills yet</p>
+                    </div>
+                </div>
+
+                <!-- Initial Empty State -->
+                <div class="empty-state" th:if="${freelancer == null}">
+                    <i class="fas fa-search"></i>
+                    <h5>Find someone to endorse</h5>
+                    <p class="text-muted">Search for a freelancer above to view their skills</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function endorseSkill(button) {
+            const skillId = button.getAttribute('data-skill-id');
+            const userId = button.getAttribute('data-user-id');
+            
+            fetch('/endorsements/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    skillId: skillId, 
+                    userId: userId 
+                })
+            }).then(response => {
+                if (response.ok) {
+                    button.classList.add('endorsed');
+                    button.innerHTML = '<i class="fas fa-check"></i> Endorsed';
+                    button.disabled = true;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

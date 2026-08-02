@@ -105,7 +105,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
      * Find featured jobs
      */
     @Query("SELECT j FROM Job j WHERE j.isPublished = true AND j.isFeatured = true AND j.jobStatus = 'OPEN' ORDER BY j.postedAt DESC")
-    List<Job> findFeaturedJobs(Pageable pageable);
+    Page<Job> findFeaturedJobs(Pageable pageable);
     
     // ==========================================
     // Sorting & Ranking Queries

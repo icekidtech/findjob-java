@@ -92,7 +92,7 @@ public class JobController {
         try {
             Job job = jobService.getJobById(id);
             
-            if (!job.getIsActive() || !job.getIsPublished()) {
+            if (!job.isOpenForApplications() || !job.getIsPublished()) {
                 model.addAttribute("error", "This job is no longer available");
                 return "error/404";
             }

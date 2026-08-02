@@ -306,11 +306,13 @@ public class ApplicationController {
             redirectAttributes.addFlashAttribute("success", 
                 "Application accepted! Freelancer " + application.getFreelancer().getFullName() + " is now hired.");
             
+            return "redirect:/jobs/" + application.getJob().getId() + "/applications";
+            
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error: " + e.getMessage());
         }
         
-        return "redirect:/jobs/" + application.getJob().getId() + "/applications";
+        return "redirect:/dashboard";
     }
     
     /**
@@ -341,10 +343,12 @@ public class ApplicationController {
             
             redirectAttributes.addFlashAttribute("success", "Application rejected");
             
+            return "redirect:/jobs/" + application.getJob().getId() + "/applications";
+            
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error: " + e.getMessage());
         }
         
-        return "redirect:/jobs/" + application.getJob().getId() + "/applications";
+        return "redirect:/dashboard";
     }
 }
