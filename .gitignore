@@ -58,6 +58,10 @@ uploads/
 temp/
 tmp/
 
+# Database
+data/
+*.h2.db
+
 # Runtime
 .classpath
 .project
