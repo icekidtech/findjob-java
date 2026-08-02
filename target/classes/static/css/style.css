@@ -1,0 +1,545 @@
+/* ============================================
+   General Styles
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* ============================================
+   Navigation Bar
+   ============================================ */
+
+.navbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.navbar-brand i {
+    margin-right: 8px;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    font-size: 15px;
+}
+
+.nav-link:hover {
+    color: white !important;
+}
+
+.navbar-dark .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* ============================================
+   Hero Section
+   ============================================ */
+
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -5%;
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.hero-section > * {
+    position: relative;
+    z-index: 1;
+}
+
+.illustration-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+}
+
+/* ============================================
+   Feature Cards
+   ============================================ */
+
+.feature-card {
+    transition: all 0.3s ease;
+    border-radius: 15px;
+    border: 1px solid #e0e0e0;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+}
+
+.feature-icon {
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.1);
+}
+
+.feature-card h4 {
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+/* ============================================
+   Tier Cards
+   ============================================ */
+
+.tier-card {
+    transition: all 0.3s ease;
+    border: 2px solid #e0e0e0;
+}
+
+.tier-card:hover {
+    transform: translateY(-5px);
+    border-color: #667eea;
+    box-shadow: 0 15px 30px rgba(102, 126, 234, 0.15) !important;
+}
+
+.tier-card h5 {
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    color: white;
+}
+
+.btn-light {
+    font-weight: 600;
+}
+
+.btn-outline-light {
+    border-width: 2px;
+    font-weight: 600;
+}
+
+.btn-outline-light:hover {
+    background: white;
+    color: #667eea;
+}
+
+/* ============================================
+   Section Spacing
+   ============================================ */
+
+section {
+    padding: 60px 0;
+}
+
+section h2 {
+    color: #333;
+    font-weight: 700;
+}
+
+section p {
+    color: #666;
+}
+
+/* ============================================
+   Background Colors
+   ============================================ */
+
+.bg-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-light {
+    background-color: #f8f9fa;
+}
+
+.bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+
+footer {
+    background-color: #1a1a1a;
+    margin-top: auto;
+}
+
+footer h5 {
+    color: white;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+footer a {
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #667eea !important;
+}
+
+footer hr {
+    border-color: #333;
+}
+
+/* ============================================
+   Forms
+   ============================================ */
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* ============================================
+   Alerts & Messages
+   ============================================ */
+
+.alert {
+    border-radius: 10px;
+    border: none;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+/* ============================================
+   Utilities
+   ============================================ */
+
+.text-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+}
+
+.border-primary {
+    border-color: #667eea !important;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 768px) {
+    section {
+        padding: 40px 0;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .display-5 {
+        font-size: 1.8rem;
+    }
+    
+    .navbar-collapse {
+        padding-top: 1rem;
+    }
+    
+    .navbar-brand {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-section {
+        padding: 3rem 0;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    .d-grid.gap-2.d-sm-flex {
+        display: grid !important;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.6s ease-out;
+}
+
+.slide-in-right {
+    animation: slideInRight 0.6s ease-out;
+}
+
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #764ba2;
+}
+
+/* ============================================
+   Loading States
+   ============================================ */
+
+.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(102, 126, 234, 0.3);
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   Badges & Badges
+   ============================================ */
+
+.badge {
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+    border-radius: 20px;
+}
+
+.badge-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+/* ============================================
+   Cards
+   ============================================ */
+
+.card {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 1.5rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* ============================================
+   Tables
+   ============================================ */
+
+.table {
+    border-collapse: collapse;
+}
+
+.table thead th {
+    background: #f8f9fa;
+    font-weight: 600;
+    border-bottom: 2px solid #e0e0e0;
+    color: #333;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* ============================================
+   Step Items
+   ============================================ */
+
+.step-item {
+    padding: 0 0 30px 70px;
+    position: relative;
+}
+
+.step-item .step-number {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.step-item h5 {
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.step-item p {
+    color: #666;
+    margin: 0;
+}
