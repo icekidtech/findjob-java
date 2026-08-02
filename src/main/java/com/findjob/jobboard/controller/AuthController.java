@@ -139,9 +139,9 @@ public class AuthController {
                 return "auth/register";
             }
             
-            // Validate password strength
+            // Validate password length
             if (registerRequest.getPassword().length() < 8) {
-                model.addAttribute("error", "Password must be at least 8 characters");
+                model.addAttribute("error", "Password must be 8 characters or longer");
                 return "auth/register";
             }
             
@@ -160,6 +160,13 @@ public class AuthController {
             
             // Save user
             User savedUser = userService.save(newUser);
+            
+            // Verify user was saved before attempting authentication
+            User verifiedUser = userService.findByEmail(registerRequest.getEmail());
+            if (verifiedUser == null) {
+                model.addAttribute("error", "Failed to create account. Please try again.");
+                return "auth/register";
+            }
             
             // Auto-login user after registration
             Authentication authentication = authenticationManager.authenticate(
