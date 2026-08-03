@@ -564,11 +564,15 @@
         document.getElementById('budgetFixed').addEventListener('change', function() {
             document.getElementById('fixedBudgetSection').style.display = 'block';
             document.getElementById('hourlyBudgetSection').style.display = 'none';
+            document.getElementById('budget').required = true;
+            document.getElementById('budgetHourly').required = false;
         });
         
         document.getElementById('budgetHourly').addEventListener('change', function() {
             document.getElementById('fixedBudgetSection').style.display = 'none';
             document.getElementById('hourlyBudgetSection').style.display = 'block';
+            document.getElementById('budget').required = false;
+            document.getElementById('budgetHourly').required = true;
         });
         
         // Character counter
