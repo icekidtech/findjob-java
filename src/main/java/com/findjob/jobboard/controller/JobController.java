@@ -17,9 +17,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.findjob.jobboard.service.CloudinaryService;
+
 import jakarta.validation.Valid;
-import java.math.BigDecimal;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * JobController - Handles job-related endpoints
@@ -40,6 +42,9 @@ public class JobController {
     
     @Autowired
     private JobViewService jobViewService;
+    
+    @Autowired
+    private CloudinaryService cloudinaryService;
     
     // ==========================================
     // Job Listing & Browsing
@@ -338,7 +343,7 @@ public class JobController {
     @PostMapping("/{jobId}/apply")
     public String submitApplication(@PathVariable Long jobId,
                                    @RequestParam String coverLetter,
-                                   @RequestParam(required = false) String cvFileUrl,
+                                   @RequestParam(required = false) MultipartFile cvFileUrl,
                                    @RequestParam(required = false) String portfolioUrl,
                                    Authentication authentication,
                                    RedirectAttributes redirectAttributes) {
@@ -355,12 +360,23 @@ public class JobController {
                 return "redirect:/jobs/" + jobId;
             }
             
+            // Handle CV file upload to Cloudinary
+            String cvFileUrl_str = null;
+            if (cvFileUrl != null && !cvFileUrl.isEmpty()) {
+                try {
+                    cvFileUrl_str = cloudinaryService.uploadCVFile(cvFileUrl);
+                } catch (Exception e) {
+                    System.err.println("Error uploading CV file to Cloudinary: " + e.getMessage());
+                    redirectAttributes.addFlashAttribute("warning", "CV file could not be uploaded, but application was submitted");
+                }
+            }
+            
             // Create and submit application
             JobApplication application = new JobApplication();
             application.setJob(job);
             application.setFreelancer(freelancer);
             application.setCoverLetter(coverLetter);
-            application.setCvFileUrl(cvFileUrl);
+            application.setCvFileUrl(cvFileUrl_str);
             application.setPortfolioUrl(portfolioUrl);
             
             applicationService.submitApplication(application);
