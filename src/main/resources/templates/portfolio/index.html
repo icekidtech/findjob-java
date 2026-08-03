@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio - FindJob</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --gradient-start: #667eea;
+            --gradient-end: #764ba2;
+            --primary-color: #667eea;
+            --light-bg: #f8f9fa;
+            --border-color: #e0e0e0;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .portfolio-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .profile-section {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            flex-shrink: 0;
+        }
+
+        .profile-info h2 {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stars {
+            color: #ffc107;
+            font-size: 1.1rem;
+        }
+
+        .rating-value {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .btn-edit {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit:hover {
+            background: var(--gradient-end);
+            color: white;
+        }
+
+        .portfolio-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .section-content {
+            color: #666;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: var(--light-bg);
+            border-radius: 8px;
+        }
+
+        .info-item i {
+            color: var(--primary-color);
+            width: 24px;
+            font-size: 1.1rem;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-message i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .portfolio-url {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .portfolio-url a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .portfolio-url a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .alert {
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .portfolio-container {
+                padding: 20px;
+            }
+
+            .profile-section {
+                gap: 15px;
+            }
+
+            .profile-avatar {
+                width: 100px;
+                height: 100px;
+                font-size: 40px;
+            }
+
+            .profile-info h2 {
+                font-size: 1.25rem;
+            }
+
+            .btn-edit {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="fas fa-briefcase"></i> FindJob
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/jobs}">Jobs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/profile}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/portfolio}">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/auth/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+                        <form id="logoutForm" th:action="@{/auth/logout}" method="POST" style="display:none;"></form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-briefcase"></i> My Portfolio</h1>
+            <p>Showcase your work and skills to potential clients</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Success/Error Messages -->
+        <th:block th:if="${success != null and !success.isEmpty()}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" th:text="${success}">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </th:block>
+        <th:block th:if="${error != null and !error.isEmpty()}">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" th:text="${error}">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </th:block>
+
+        <!-- Portfolio Card -->
+        <div class="portfolio-container">
+            <!-- Profile Section -->
+            <div class="profile-section">
+                <div class="profile-avatar">
+                    <span th:text="${user.firstName.charAt(0) + user.lastName.charAt(0)}"></span>
+                </div>
+                <div class="profile-info">
+                    <h2 th:text="${user.getFullName()}"></h2>
+                    <p th:text="${user.headline ?: 'Professional Freelancer'}"></p>
+                    
+                    <div class="rating-display">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-value" th:text="${#numbers.formatDecimal(user.reputationScore, 1, 2)}"></span>
+                        <span style="color: #999; font-size: 0.9rem;" th:text="'(' + ${user.totalReviews} + ' reviews)'"></span>
+                    </div>
+
+                    <a th:href="@{/portfolio/edit}" class="btn btn-edit">
+                        <i class="fas fa-edit"></i> Edit Portfolio
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bio Section -->
+            <div class="portfolio-section">
+                <h3 class="section-title"><i class="fas fa-user"></i> About Me</h3>
+                <div th:if="${user.bio}" class="section-content" th:text="${user.bio}"></div>
+                <div th:if="!${user.bio}" class="empty-message">
+                    <i class="fas fa-user-plus"></i>
+                    <p>No bio yet. <a th:href="@{/portfolio/edit}" style="color: var(--primary-color);">Add one now</a></p>
+                </div>
+            </div>
+
+            <!-- Experience Section -->
+            <div class="portfolio-section">
+                <h3 class="section-title"><i class="fas fa-graduation-cap"></i> Experience</h3>
+                <div th:if="${user.experience}" class="section-content" th:text="${user.experience}"></div>
+                <div th:if="!${user.experience}" class="empty-message">
+                    <i class="fas fa-briefcase"></i>
+                    <p>No experience details yet. <a th:href="@{/portfolio/edit}" style="color: var(--primary-color);">Add your experience</a></p>
+                </div>
+            </div>
+
+            <!-- Portfolio Link Section -->
+            <div class="portfolio-section">
+                <h3 class="section-title"><i class="fas fa-link"></i> Portfolio Link</h3>
+                <div th:if="${user.portfolioUrl}">
+                    <div class="info-item">
+                        <i class="fas fa-globe"></i>
+                        <div class="portfolio-url">
+                            <a th:href="${user.portfolioUrl}" target="_blank" rel="noopener noreferrer" th:text="${user.portfolioUrl}"></a>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="!${user.portfolioUrl}" class="empty-message">
+                    <i class="fas fa-link"></i>
+                    <p>No portfolio link yet. <a th:href="@{/portfolio/edit}" style="color: var(--primary-color);">Add your portfolio URL</a></p>
+                </div>
+            </div>
+
+            <!-- Location Section -->
+            <div class="portfolio-section">
+                <h3 class="section-title"><i class="fas fa-map-marker-alt"></i> Location</h3>
+                <div th:if="${user.location}">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span th:text="${user.location}"></span>
+                    </div>
+                </div>
+                <div th:if="!${user.location}" class="empty-message">
+                    <i class="fas fa-map"></i>
+                    <p>No location set</p>
+                </div>
+            </div>
+
+            <!-- Hourly Rate Section -->
+            <div class="portfolio-section">
+                <h3 class="section-title"><i class="fas fa-money-bill"></i> Hourly Rate</h3>
+                <div th:if="${user.hourlyRate}">
+                    <div class="info-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span style="font-weight: 600;">₦<span th:text="${#numbers.formatInteger(user.hourlyRate, 0)}"></span> per hour</span>
+                    </div>
+                </div>
+                <div th:if="!${user.hourlyRate}" class="empty-message">
+                    <i class="fas fa-question-circle"></i>
+                    <p>No hourly rate set yet</p>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="portfolio-section">
+                <h3 class="section-title"><i class="fas fa-chart-bar"></i> Stats</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="info-item">
+                            <i class="fas fa-tasks"></i>
+                            <div>
+                                <strong th:text="${user.totalProjects}"></strong>
+                                <br>
+                                <small>Completed Projects</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-item">
+                            <i class="fas fa-star"></i>
+                            <div>
+                                <strong th:text="${#numbers.formatDecimal(user.reputationScore, 1, 2)}"></strong>
+                                <br>
+                                <small>Average Rating</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-item">
+                            <i class="fas fa-comment-dots"></i>
+                            <div>
+                                <strong th:text="${user.totalReviews}"></strong>
+                                <br>
+                                <small>Reviews</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 FindJob. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

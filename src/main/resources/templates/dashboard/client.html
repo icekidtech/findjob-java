@@ -15,99 +15,192 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     
     <style>
+        /* Theme Variables */
+        :root {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f8f9fa;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --text-muted: #999;
+            --border-color: #eee;
+            --gradient-start: #667eea;
+            --gradient-end: #764ba2;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-tertiary: #3a3a3a;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --border-color: #444;
+            --gradient-start: #667eea;
+            --gradient-end: #764ba2;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="brown"] {
+            --bg-primary: #f5f1ed;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #ebe6e0;
+            --text-primary: #3e2723;
+            --text-secondary: #5d4037;
+            --text-muted: #8d6e63;
+            --border-color: #d7ccc8;
+            --gradient-start: #8d6e63;
+            --gradient-end: #6d4c41;
+            --shadow: 0 2px 8px rgba(93, 64, 55, 0.15);
+        }
+
+        [data-theme="green"] {
+            --bg-primary: #f1f8f4;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8f5e9;
+            --text-primary: #1b5e20;
+            --text-secondary: #2e7d32;
+            --text-muted: #66bb6a;
+            --border-color: #c8e6c9;
+            --gradient-start: #43a047;
+            --gradient-end: #2e7d32;
+            --shadow: 0 2px 8px rgba(46, 125, 50, 0.15);
+        }
+
         body {
-            background: #f8f9fa;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background 0.3s, color 0.3s;
         }
         
         .dashboard-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
             color: white;
-            padding: 40px 0;
-            margin-bottom: 40px;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-header p {
+            font-size: 0.95rem;
+            margin: 0;
         }
         
         .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: var(--shadow);
             text-align: center;
             transition: all 0.3s ease;
-            margin-bottom: 20px;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-        
-        .stat-icon {
-            font-size: 32px;
-            color: #667eea;
             margin-bottom: 15px;
         }
         
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stat-icon {
+            font-size: 1.75rem;
+            color: var(--gradient-start);
+            margin-bottom: 10px;
+        }
+        
         .stat-number {
-            font-size: 28px;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: #333;
-            margin-bottom: 5px;
+            color: var(--text-primary);
+            margin-bottom: 3px;
         }
         
         .stat-label {
-            font-size: 14px;
-            color: #999;
+            font-size: 0.85rem;
+            color: var(--text-muted);
         }
         
         .section-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            margin-bottom: 30px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
         }
         
         .section-title {
-            font-size: 22px;
+            font-size: 1.1rem;
             font-weight: 700;
-            color: #333;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #667eea;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gradient-start);
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
             border: none;
             font-weight: 600;
+            padding: 8px 20px;
+            font-size: 0.9rem;
         }
         
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-outline-primary {
+            border-color: var(--gradient-start);
+            color: var(--gradient-start);
+            font-weight: 600;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--gradient-start);
+            border-color: var(--gradient-start);
+            color: white;
         }
         
         .empty-state {
             text-align: center;
-            padding: 40px;
-            color: #999;
+            padding: 30px 20px;
+            color: var(--text-muted);
         }
         
         .empty-state i {
-            font-size: 64px;
-            margin-bottom: 20px;
+            font-size: 3rem;
+            margin-bottom: 15px;
             opacity: 0.5;
+        }
+
+        .empty-state h4 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
         }
         
         .navbar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            padding: 0.5rem 0;
         }
         
         .job-status {
             display: inline-block;
             padding: 4px 12px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 0.75rem;
             font-weight: 600;
         }
         
@@ -119,6 +212,160 @@
         .status-closed {
             background: #f8d7da;
             color: #721c24;
+        }
+
+        footer {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 20px 0;
+            margin-top: 30px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+            padding: 8px;
+            display: flex;
+            gap: 5px;
+            z-index: 1000;
+        }
+
+        .theme-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-btn.active {
+            border-color: var(--gradient-start);
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .theme-btn-light { background: #f8f9fa; color: #ffa500; }
+        .theme-btn-dark { background: #2d2d2d; color: #ffd700; }
+        .theme-btn-brown { background: #8d6e63; color: #fff; }
+        .theme-btn-green { background: #43a047; color: #fff; }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .dashboard-header {
+                padding: 15px 0;
+                margin-bottom: 15px;
+            }
+
+            .dashboard-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .dashboard-header p {
+                font-size: 0.85rem;
+            }
+
+            .stat-card {
+                padding: 15px;
+                margin-bottom: 12px;
+            }
+
+            .stat-icon {
+                font-size: 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 1.3rem;
+            }
+
+            .section-card {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+
+            .section-title {
+                font-size: 1rem;
+                margin-bottom: 12px;
+                padding-bottom: 8px;
+            }
+
+            .empty-state {
+                padding: 25px 15px;
+            }
+
+            .empty-state i {
+                font-size: 2.5rem;
+            }
+
+            .btn-primary, .btn-outline-primary {
+                font-size: 0.85rem;
+                padding: 7px 16px;
+            }
+
+            .theme-toggle {
+                bottom: 15px;
+                right: 15px;
+                padding: 6px;
+            }
+
+            .theme-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 10px;
+            }
+
+            .dashboard-header h1 {
+                font-size: 1.3rem;
+            }
+
+            .stat-card {
+                padding: 12px;
+            }
+
+            .section-card {
+                padding: 12px;
+            }
+
+            .btn-primary, .btn-outline-primary {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            footer {
+                padding: 15px 0;
+                margin-top: 20px;
+            }
+
+            .theme-toggle {
+                bottom: 10px;
+                right: 10px;
+                padding: 5px;
+            }
+
+            .theme-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
@@ -166,21 +413,21 @@
     <!-- Dashboard Header -->
     <div class="dashboard-header">
         <div class="container">
-            <h1 class="display-5 fw-bold mb-3">Welcome, <span th:text="${user.getCompanyName() ?: user.getFirstName()}">Company</span>!</h1>
-            <p class="lead mb-0">Manage your job postings and find talented freelancers</p>
+            <h1 class="fw-bold">Welcome, <span th:text="${user.getCompanyName() ?: user.getFirstName()}">Company</span>!</h1>
+            <p class="mb-0">Manage your job postings and find talented freelancers</p>
         </div>
     </div>
 
     <!-- Main Content -->
     <div class="container">
         <!-- Stats Row -->
-        <div class="row mb-4">
+        <div class="row mb-3">
             <div class="col-md-6 col-lg-3">
                 <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-briefcase"></i>
                     </div>
-                    <div class="stat-number">0</div>
+                    <div class="stat-number" th:text="${activeJobsCount}">0</div>
                     <div class="stat-label">Active Jobs</div>
                 </div>
             </div>
@@ -238,11 +485,57 @@
         <!-- Active Jobs -->
         <div class="section-card">
             <h2 class="section-title"><i class="fas fa-briefcase"></i> Your Job Postings</h2>
-            <div class="empty-state">
+            
+            <!-- Jobs List -->
+            <div th:if="${postedJobs != null and #lists.size(postedJobs) > 0}">
+                <div th:each="job : ${postedJobs}" class="job-item" style="padding: 15px; border-bottom: 1px solid var(--border-color); transition: all 0.3s ease;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h5 style="margin-bottom: 5px; color: var(--text-primary);" th:text="${job.title}"></h5>
+                            <p style="margin: 0 0 8px 0; color: var(--text-secondary); font-size: 0.9rem;" th:text="${job.description}"></p>
+                            
+                            <div style="display: flex; gap: 15px; font-size: 0.85rem; flex-wrap: wrap;">
+                                <span style="color: var(--text-muted);">
+                                    💼 <span th:text="${job.experienceLevel}"></span>
+                                </span>
+                                <span style="color: var(--text-muted);">
+                                    💰 <span th:text="${job.currency}"></span> <span th:text="${#numbers.formatInteger(job.budgetAmount, 0)}"></span>
+                                </span>
+                                <span style="color: var(--text-muted);">
+                                    👁️ <span th:text="${job.viewsCount}"></span> views
+                                </span>
+                                <span style="color: var(--text-muted);">
+                                    📅 Posted <span th:text="${#dates.format(job.postedAt, 'MMM dd, yyyy')}"></span>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-left: 15px;">
+                            <span class="job-status" th:classappend="${job.jobStatus.name() == 'OPEN' ? 'status-open' : 'status-closed'}" th:text="${job.jobStatus.name()}"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div style="margin-top: 12px; display: flex; gap: 8px;">
+                        <a th:href="@{'/jobs/' + ${job.id}}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                        <a href="#" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a href="#" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-times"></i> Close
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- No Jobs Message -->
+            <div th:if="${postedJobs == null or #lists.size(postedJobs) == 0}" class="empty-state">
                 <i class="fas fa-inbox"></i>
                 <h4>No active jobs yet</h4>
                 <p>Post your first job to start finding talented freelancers</p>
-                <a th:href="@{/jobs/post}" class="btn btn-primary mt-3">
+                <a th:href="@{/jobs/post}" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Post a Job
                 </a>
             </div>
@@ -270,14 +563,47 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-5">
-        <div class="container text-center">
+    <footer class="text-center">
+        <div class="container">
             <p class="small mb-0">&copy; 2026 FindJob. All rights reserved.</p>
         </div>
     </footer>
 
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button class="theme-btn theme-btn-light active" onclick="setTheme('light')" title="Light Mode">
+            <i class="fas fa-sun"></i>
+        </button>
+        <button class="theme-btn theme-btn-dark" onclick="setTheme('dark')" title="Dark Mode">
+            <i class="fas fa-moon"></i>
+        </button>
+        <button class="theme-btn theme-btn-brown" onclick="setTheme('brown')" title="Brown Mode">
+            <i class="fas fa-tree"></i>
+        </button>
+        <button class="theme-btn theme-btn-green" onclick="setTheme('green')" title="Green Mode">
+            <i class="fas fa-leaf"></i>
+        </button>
+    </div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script th:src="@{/js/main.js}"></script>
+    
+    <script>
+        // Theme Management
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            // Update active button
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.theme-btn-${theme}`).classList.add('active');
+        }
+
+        // Load saved theme on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+        });
+    </script>
 </body>
 </html>

@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import jakarta.validation.Valid;
+import java.util.UUID;
 
 /**
  * ProfileController - Handles user profile operations
@@ -54,16 +53,10 @@ public class ProfileController {
      * Handle profile completion submission
      */
     @PostMapping("/complete")
-    public String completeProfile(@Valid @ModelAttribute("user") User profileData,
-                                 BindingResult bindingResult,
+    public String completeProfile(@ModelAttribute("user") User profileData,
                                  Authentication authentication,
                                  Model model,
                                  RedirectAttributes redirectAttributes) {
-        
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("title", "Complete Your Profile");
-            return "profile/complete";
-        }
         
         try {
             String email = authentication.getName();
@@ -101,7 +94,7 @@ public class ProfileController {
         try {
             User user = userService.getUserById(userId);
             
-            if (!user.getIsActive()) {
+            if (user == null || !user.getIsActive()) {
                 model.addAttribute("error", "This profile is no longer available");
                 return "error/404";
             }
@@ -157,6 +150,11 @@ public class ProfileController {
         try {
             User user = userService.getUserById(userId);
             
+            if (user == null) {
+                model.addAttribute("error", "User not found");
+                return "error/404";
+            }
+            
             // Verify user owns this profile
             if (authentication == null || !authentication.isAuthenticated()) {
                 return "redirect:/auth/login";
@@ -185,10 +183,8 @@ public class ProfileController {
      */
     @PostMapping("/edit/{userId}")
     public String updateProfile(@PathVariable Long userId,
-                               @Valid @ModelAttribute("user") User profileData,
-                               BindingResult bindingResult,
+                               @ModelAttribute("user") User profileData,
                                Authentication authentication,
-                               Model model,
                                RedirectAttributes redirectAttributes) {
         
         try {
@@ -204,26 +200,19 @@ public class ProfileController {
                 return "redirect:/profile/" + userId;
             }
             
-            if (bindingResult.hasErrors()) {
-                model.addAttribute("title", "Edit Profile");
-                model.addAttribute("userRole", currentUser.getUserRole().name());
-                return "profile/edit";
-            }
-            
             // Update profile
-            User updatedUser = userService.updateProfile(userId, profileData);
+            userService.updateProfile(userId, profileData);
             
             redirectAttributes.addFlashAttribute("success", "Profile updated successfully!");
             
             return "redirect:/profile/" + userId;
             
         } catch (IllegalArgumentException e) {
-            model.addAttribute("error", "User not found");
-            return "error/404";
+            redirectAttributes.addFlashAttribute("error", "User not found");
+            return "redirect:/profile";
         } catch (Exception e) {
-            model.addAttribute("error", "Failed to update profile: " + e.getMessage());
-            model.addAttribute("title", "Edit Profile");
-            return "profile/edit";
+            redirectAttributes.addFlashAttribute("error", "Failed to update profile: " + e.getMessage());
+            return "redirect:/profile/edit/" + userId;
         }
     }
     
@@ -248,8 +237,7 @@ public class ProfileController {
      * Update own profile (without ID)
      */
     @PostMapping("/edit")
-    public String updateOwnProfile(@Valid @ModelAttribute("user") User profileData,
-                                  BindingResult bindingResult,
+    public String updateOwnProfile(@ModelAttribute("user") User profileData,
                                   Authentication authentication,
                                   RedirectAttributes redirectAttributes) {
         
@@ -262,8 +250,7 @@ public class ProfileController {
             return "redirect:/auth/login";
         }
         
-        return updateProfile(user.getId(), profileData, bindingResult, authentication, 
-                           new org.springframework.ui.ExtendedModelMap(), redirectAttributes);
+        return updateProfile(user.getId(), profileData, authentication, redirectAttributes);
     }
     
     // ==========================================

@@ -1,11 +1,10 @@
 package com.findjob.jobboard.controller;
 
-import com.findjob.jobboard.dto.ApplicationDTO;
+import com.findjob.jobboard.model.ApplicationStatus;
 import com.findjob.jobboard.model.Job;
 import com.findjob.jobboard.model.JobApplication;
-import com.findjob.jobboard.model.ApplicationStatus;
 import com.findjob.jobboard.model.User;
-import com.findjob.jobboard.service.JobApplicationService;
+import com.findjob.jobboard.service.ApplicationService;
 import com.findjob.jobboard.service.JobService;
 import com.findjob.jobboard.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,24 +14,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * ApplicationController - Handles job application endpoints
- * Manages bidding, acceptance, rejection, and withdrawal
+ * ApplicationController - Handles job applications management
+ * Allows clients to view, accept, and decline applications
  */
 @Controller
 @RequestMapping("/applications")
 public class ApplicationController {
     
     @Autowired
-    private JobApplicationService applicationService;
+    private ApplicationService applicationService;
     
     @Autowired
     private JobService jobService;
@@ -40,245 +37,123 @@ public class ApplicationController {
     @Autowired
     private UserService userService;
     
-    // ==========================================
-    // Submit Application
-    // ==========================================
-    
     /**
-     * Show application form for a job
+     * View all applications for a specific job
+     * GET /applications/job/{jobId}
      */
-    @GetMapping("/apply/{jobId}")
-    public String showApplicationForm(
+    @GetMapping("/job/{jobId}")
+    public String viewJobApplications(
             @PathVariable Long jobId,
-            Authentication authentication,
-            Model model) {
-        
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return "redirect:/auth/login";
-        }
-        
-        try {
-            Job job = jobService.getJobById(jobId);
-            User freelancer = userService.findByEmail(authentication.getName());
-            
-            if (freelancer == null || !freelancer.isFreelancer()) {
-                model.addAttribute("error", "Only freelancers can apply for jobs");
-                return "redirect:/jobs/" + jobId;
-            }
-            
-            if (!job.isOpenForApplications()) {
-                model.addAttribute("error", "This job is no longer accepting applications");
-                return "redirect:/jobs/" + jobId;
-            }
-            
-            // Check if already applied
-            Optional<JobApplication> existingApp = applicationService.getApplication(job, freelancer);
-            if (existingApp.isPresent()) {
-                model.addAttribute("error", "You have already applied to this job");
-                return "redirect:/jobs/" + jobId;
-            }
-            
-            model.addAttribute("title", "Apply for: " + job.getTitle());
-            model.addAttribute("job", job);
-            model.addAttribute("applicationDTO", new ApplicationDTO());
-            
-            return "applications/apply";
-            
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", "Job not found");
-            return "error/404";
-        } catch (Exception e) {
-            model.addAttribute("error", "Error: " + e.getMessage());
-            return "error/error";
-        }
-    }
-    
-    /**
-     * Submit job application
-     */
-    @PostMapping("/apply/{jobId}")
-    public String submitApplication(
-            @PathVariable Long jobId,
-            @Valid @ModelAttribute("applicationDTO") ApplicationDTO applicationDTO,
-            BindingResult bindingResult,
-            Authentication authentication,
-            Model model,
-            RedirectAttributes redirectAttributes) {
-        
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return "redirect:/auth/login";
-        }
-        
-        try {
-            Job job = jobService.getJobById(jobId);
-            User freelancer = userService.findByEmail(authentication.getName());
-            
-            if (freelancer == null || !freelancer.isFreelancer()) {
-                redirectAttributes.addFlashAttribute("error", "Only freelancers can apply");
-                return "redirect:/jobs/" + jobId;
-            }
-            
-            if (bindingResult.hasErrors()) {
-                model.addAttribute("title", "Apply for: " + job.getTitle());
-                model.addAttribute("job", job);
-                return "applications/apply";
-            }
-            
-            // Create application
-            JobApplication application = JobApplication.builder()
-                .job(job)
-                .freelancer(freelancer)
-                .coverLetter(applicationDTO.getCoverLetter())
-                .cvFileUrl(applicationDTO.getCvFileUrl())
-                .portfolioUrl(applicationDTO.getPortfolioUrl())
-                .applicationStatus(ApplicationStatus.PENDING)
-                .build();
-            
-            JobApplication saved = applicationService.submitApplication(application);
-            
-            redirectAttributes.addFlashAttribute("success", 
-                "Application submitted! Wait for the client's response.");
-            
-            return "redirect:/applications/my-applications";
-            
-        } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/jobs/" + jobId;
-        } catch (Exception e) {
-            model.addAttribute("error", "Failed to submit application: " + e.getMessage());
-            return "error/error";
-        }
-    }
-    
-    // ==========================================
-    // Freelancer View Applications
-    // ==========================================
-    
-    /**
-     * View freelancer's applications
-     */
-    @GetMapping("/my-applications")
-    public String myApplications(
             @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String status,
             Authentication authentication,
             Model model) {
         
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return "redirect:/auth/login";
-        }
-        
         try {
-            User freelancer = userService.findByEmail(authentication.getName());
+            // Verify user is authenticated and is a client
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return "redirect:/auth/login";
+            }
             
-            if (freelancer == null || !freelancer.isFreelancer()) {
-                model.addAttribute("error", "Only freelancers can view this page");
+            User currentUser = userService.findByEmail(authentication.getName());
+            if (currentUser == null || !currentUser.isClient()) {
                 return "redirect:/dashboard";
             }
             
-            Pageable pageable = PageRequest.of(page, 10);
-            Page<JobApplication> applicationsPage;
+            // Get job and verify ownership
+            Job job = jobService.getJobById(jobId);
             
-            if (status != null && !status.isEmpty()) {
-                ApplicationStatus appStatus = ApplicationStatus.valueOf(status.toUpperCase());
-                applicationsPage = applicationService.getPendingApplicationsByFreelancerPaginated(freelancer, pageable);
-                model.addAttribute("selectedStatus", status);
-            } else {
-                applicationsPage = applicationService.getApplicationsByFreelancerPaginated(freelancer, pageable);
+            if (job == null || !job.getClient().getId().equals(currentUser.getId())) {
+                model.addAttribute("error", "You don't have permission to view these applications");
+                return "error/403";
             }
             
-            model.addAttribute("title", "My Applications");
-            model.addAttribute("applications", applicationsPage.getContent());
-            model.addAttribute("currentPage", page);
-            model.addAttribute("totalPages", applicationsPage.getTotalPages());
+            // Get applications with optional status filter
+            Page<JobApplication> applications;
+            Pageable pageable = PageRequest.of(page, size);
             
-            return "applications/my-applications";
+            if (status != null && !status.isBlank()) {
+                try {
+                    ApplicationStatus appStatus = ApplicationStatus.valueOf(status.toUpperCase());
+                    applications = applicationService.getApplicationsByJobAndStatus(jobId, appStatus, pageable);
+                } catch (IllegalArgumentException e) {
+                    applications = applicationService.getApplicationsByJob(jobId, pageable);
+                }
+            } else {
+                applications = applicationService.getApplicationsByJob(jobId, pageable);
+            }
+            
+            model.addAttribute("job", job);
+            model.addAttribute("applications", applications);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", applications.getTotalPages());
+            model.addAttribute("totalApplications", applications.getTotalElements());
+            model.addAttribute("statusFilter", status);
+            model.addAttribute("title", job.getTitle() + " - Applications");
+            
+            return "applications/job-applications";
             
         } catch (Exception e) {
             model.addAttribute("error", "Error loading applications: " + e.getMessage());
-            return "error/error";
+            return "error/500";
         }
     }
     
     /**
-     * Withdraw application
-     */
-    @PostMapping("/{applicationId}/withdraw")
-    public String withdrawApplication(
-            @PathVariable Long applicationId,
-            Authentication authentication,
-            RedirectAttributes redirectAttributes) {
-        
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return "redirect:/auth/login";
-        }
-        
-        try {
-            JobApplication application = applicationService.getApplicationById(applicationId);
-            User freelancer = userService.findByEmail(authentication.getName());
-            
-            // Verify ownership
-            if (!application.getFreelancer().getId().equals(freelancer.getId())) {
-                redirectAttributes.addFlashAttribute("error", "You don't have permission to withdraw this");
-                return "redirect:/applications/my-applications";
-            }
-            
-            applicationService.withdrawApplication(applicationId);
-            
-            redirectAttributes.addFlashAttribute("success", "Application withdrawn successfully");
-            
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error: " + e.getMessage());
-        }
-        
-        return "redirect:/applications/my-applications";
-    }
-    
-    // ==========================================
-    // Client Review Applications
-    // ==========================================
-    
-    /**
-     * View application details
+     * View single application details
+     * GET /applications/{applicationId}
      */
     @GetMapping("/{applicationId}")
-    public String viewApplication(
+    public String viewApplicationDetail(
             @PathVariable Long applicationId,
             Authentication authentication,
             Model model) {
         
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return "redirect:/auth/login";
-        }
-        
         try {
-            JobApplication application = applicationService.getApplicationById(applicationId);
-            User client = userService.findByEmail(authentication.getName());
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return "redirect:/auth/login";
+            }
             
-            // Verify this is the job owner
-            if (!application.getJob().getClient().getId().equals(client.getId())) {
-                model.addAttribute("error", "You don't have permission to view this");
+            User currentUser = userService.findByEmail(authentication.getName());
+            if (currentUser == null) {
+                return "redirect:/auth/login";
+            }
+            
+            // Get application
+            JobApplication application = applicationService.getApplicationById(applicationId)
+                    .orElse(null);
+            
+            if (application == null) {
+                model.addAttribute("error", "Application not found");
                 return "error/404";
             }
             
-            model.addAttribute("title", "Application Details");
+            // Verify permission (client who owns the job or the freelancer who applied)
+            boolean isClientOwner = application.getJob().getClient().getId().equals(currentUser.getId());
+            boolean isFreelancerApplicant = application.getFreelancer().getId().equals(currentUser.getId());
+            
+            if (!isClientOwner && !isFreelancerApplicant) {
+                model.addAttribute("error", "You don't have permission to view this application");
+                return "error/403";
+            }
+            
             model.addAttribute("application", application);
-            model.addAttribute("job", application.getJob());
-            model.addAttribute("freelancer", application.getFreelancer());
+            model.addAttribute("isClientOwner", isClientOwner);
+            model.addAttribute("isFreelancerApplicant", isFreelancerApplicant);
+            model.addAttribute("title", "Application Details");
             
-            return "applications/view";
+            return "applications/view-application";
             
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", "Application not found");
-            return "error/404";
         } catch (Exception e) {
             model.addAttribute("error", "Error loading application: " + e.getMessage());
-            return "error/error";
+            return "error/500";
         }
     }
     
     /**
      * Accept application
+     * POST /applications/{applicationId}/accept
      */
     @PostMapping("/{applicationId}/accept")
     public String acceptApplication(
@@ -286,68 +161,87 @@ public class ApplicationController {
             Authentication authentication,
             RedirectAttributes redirectAttributes) {
         
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return "redirect:/auth/login";
-        }
-        
         try {
-            JobApplication application = applicationService.getApplicationById(applicationId);
-            User client = userService.findByEmail(authentication.getName());
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return "redirect:/auth/login";
+            }
             
-            // Verify this is the job owner
-            if (!application.getJob().getClient().getId().equals(client.getId())) {
-                redirectAttributes.addFlashAttribute("error", "You don't have permission");
+            User currentUser = userService.findByEmail(authentication.getName());
+            if (currentUser == null || !currentUser.isClient()) {
+                redirectAttributes.addFlashAttribute("error", "Only clients can accept applications");
                 return "redirect:/dashboard";
             }
             
+            // Get application and verify ownership
+            JobApplication application = applicationService.getApplicationById(applicationId)
+                    .orElse(null);
+            
+            if (application == null) {
+                redirectAttributes.addFlashAttribute("error", "Application not found");
+                return "redirect:/applications";
+            }
+            
+            if (!application.getJob().getClient().getId().equals(currentUser.getId())) {
+                redirectAttributes.addFlashAttribute("error", "You don't have permission to accept this application");
+                return "redirect:/applications/job/" + application.getJob().getId();
+            }
+            
+            // Accept application
             applicationService.acceptApplication(applicationId);
             
-            redirectAttributes.addFlashAttribute("success", 
-                "Application accepted! Freelancer " + application.getFreelancer().getFullName() + " is now hired.");
-            
-            return "redirect:/jobs/" + application.getJob().getId() + "/applications";
+            redirectAttributes.addFlashAttribute("success", "Application accepted! You can now contact the freelancer.");
+            return "redirect:/applications/" + applicationId;
             
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Error accepting application: " + e.getMessage());
+            return "redirect:/applications";
         }
-        
-        return "redirect:/dashboard";
     }
     
     /**
-     * Reject application
+     * Decline application
+     * POST /applications/{applicationId}/decline
      */
-    @PostMapping("/{applicationId}/reject")
-    public String rejectApplication(
+    @PostMapping("/{applicationId}/decline")
+    public String declineApplication(
             @PathVariable Long applicationId,
-            @RequestParam(required = false) String feedback,
             Authentication authentication,
             RedirectAttributes redirectAttributes) {
         
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return "redirect:/auth/login";
-        }
-        
         try {
-            JobApplication application = applicationService.getApplicationById(applicationId);
-            User client = userService.findByEmail(authentication.getName());
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return "redirect:/auth/login";
+            }
             
-            // Verify this is the job owner
-            if (!application.getJob().getClient().getId().equals(client.getId())) {
-                redirectAttributes.addFlashAttribute("error", "You don't have permission");
+            User currentUser = userService.findByEmail(authentication.getName());
+            if (currentUser == null || !currentUser.isClient()) {
+                redirectAttributes.addFlashAttribute("error", "Only clients can decline applications");
                 return "redirect:/dashboard";
             }
             
-            applicationService.rejectApplication(applicationId, feedback != null ? feedback : "");
+            // Get application and verify ownership
+            JobApplication application = applicationService.getApplicationById(applicationId)
+                    .orElse(null);
             
-            redirectAttributes.addFlashAttribute("success", "Application rejected");
+            if (application == null) {
+                redirectAttributes.addFlashAttribute("error", "Application not found");
+                return "redirect:/applications";
+            }
             
-            return "redirect:/jobs/" + application.getJob().getId() + "/applications";
+            if (!application.getJob().getClient().getId().equals(currentUser.getId())) {
+                redirectAttributes.addFlashAttribute("error", "You don't have permission to decline this application");
+                return "redirect:/applications/job/" + application.getJob().getId();
+            }
+            
+            // Decline application
+            applicationService.declineApplication(applicationId);
+            
+            redirectAttributes.addFlashAttribute("success", "Application declined.");
+            return "redirect:/applications/job/" + application.getJob().getId();
             
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Error declining application: " + e.getMessage());
+            return "redirect:/applications";
         }
-        
-        return "redirect:/dashboard";
     }
 }

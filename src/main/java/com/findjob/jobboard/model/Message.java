@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "messages", indexes = {
-    @Index(name = "idx_message_sender", columnList = "sender_id"),
-    @Index(name = "idx_message_recipient", columnList = "recipient_id"),
+    @Index(name = "idx_message_sender_id", columnList = "sender_id"),
+    @Index(name = "idx_message_recipient_id", columnList = "recipient_id"),
     @Index(name = "idx_message_conversation", columnList = "sender_id,recipient_id"),
-    @Index(name = "idx_message_created", columnList = "created_at")
+    @Index(name = "idx_message_created_at", columnList = "created_at")
 })
 @Data
 @NoArgsConstructor

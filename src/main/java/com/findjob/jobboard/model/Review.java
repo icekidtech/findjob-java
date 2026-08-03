@@ -20,10 +20,10 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "reviews", indexes = {
-    @Index(name = "idx_review_job", columnList = "job_id"),
-    @Index(name = "idx_review_author", columnList = "author_id"),
-    @Index(name = "idx_review_recipient", columnList = "recipient_id"),
-    @Index(name = "idx_review_created", columnList = "created_at")
+    @Index(name = "idx_review_job_id", columnList = "job_id"),
+    @Index(name = "idx_review_author_id", columnList = "author_id"),
+    @Index(name = "idx_review_recipient_id", columnList = "recipient_id"),
+    @Index(name = "idx_review_created_at", columnList = "created_at")
 })
 @Data
 @NoArgsConstructor

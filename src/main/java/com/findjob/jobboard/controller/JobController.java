@@ -17,7 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.findjob.jobboard.service.CloudinaryService;
+import com.findjob.jobboard.service.FileStorageService;
 
 import jakarta.validation.Valid;
 import java.util.List;
@@ -44,7 +44,7 @@ public class JobController {
     private JobViewService jobViewService;
     
     @Autowired
-    private CloudinaryService cloudinaryService;
+    private FileStorageService fileStorageService;
     
     // ==========================================
     // Job Listing & Browsing
@@ -360,13 +360,13 @@ public class JobController {
                 return "redirect:/jobs/" + jobId;
             }
             
-            // Handle CV file upload to Cloudinary
+            // Handle CV file upload locally
             String cvFileUrl_str = null;
             if (cvFileUrl != null && !cvFileUrl.isEmpty()) {
                 try {
-                    cvFileUrl_str = cloudinaryService.uploadCVFile(cvFileUrl);
+                    cvFileUrl_str = fileStorageService.saveCVFile(cvFileUrl);
                 } catch (Exception e) {
-                    System.err.println("Error uploading CV file to Cloudinary: " + e.getMessage());
+                    System.err.println("Error uploading CV file: " + e.getMessage());
                     redirectAttributes.addFlashAttribute("warning", "CV file could not be uploaded, but application was submitted");
                 }
             }
@@ -423,6 +423,49 @@ public class JobController {
         } catch (Exception e) {
             model.addAttribute("error", "Error loading applications: " + e.getMessage());
             return "error/error";
+        }
+    }
+    
+    /**
+     * Close/Cancel a job posting
+     * POST /jobs/{jobId}/close
+     */
+    @PostMapping("/{jobId}/close")
+    public String closeJob(@PathVariable Long jobId,
+                          Authentication authentication,
+                          RedirectAttributes redirectAttributes) {
+        
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/auth/login";
+        }
+        
+        try {
+            User client = userService.findByEmail(authentication.getName());
+            
+            if (client == null || !client.isClient()) {
+                redirectAttributes.addFlashAttribute("error", "Only clients can close jobs");
+                return "redirect:/jobs/" + jobId;
+            }
+            
+            // Get job and verify ownership
+            Job job = jobService.getJobById(jobId);
+            
+            if (!job.getClient().getId().equals(client.getId())) {
+                redirectAttributes.addFlashAttribute("error", "You don't have permission to close this job");
+                return "redirect:/jobs/" + jobId;
+            }
+            
+            // Close the job
+            job.markCancelled();
+            jobService.updateJob(job);
+            
+            redirectAttributes.addFlashAttribute("success", "Job closed successfully. No more applications will be accepted.");
+            
+            return "redirect:/jobs/my-jobs";
+            
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error closing job: " + e.getMessage());
+            return "redirect:/jobs/" + jobId;
         }
     }
 }

@@ -1,347 +1,266 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html class="light" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FindJob - Connect Talent with Opportunity</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>FindJob | Connect Talent with Opportunity</title>
+    <th:block th:replace="~{fragments/layout :: head-assets}"></th:block>
+    <style rel="stylesheet" th:href="@{/css/style.css}"></style>
 </head>
-<body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" th:href="@{/}">
-                <i class="fas fa-briefcase"></i> FindJob
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/auth/login}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-light btn-sm ms-2 text-dark fw-bold" th:href="@{/auth/register}">
-                            Sign Up
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
+<body class="bg-background text-on-background antialiased">
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<main class="pt-24">
     <!-- Hero Section -->
-    <section class="hero-section bg-gradient py-5">
-        <div class="container py-5">
-            <div class="row align-items-center">
-                <!-- Left Content -->
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <h1 class="display-4 fw-bold text-white mb-3">
-                        Connect Talent with Opportunity
-                    </h1>
-                    <p class="lead text-light mb-4">
-                        FindJob brings together freelancers and clients in a trusted community where skills are verified, 
-                        reputation matters, and great work gets rewarded.
-                    </p>
-                    <div class="d-grid gap-2 d-sm-flex">
-                        <a th:href="@{/auth/register}" class="btn btn-light btn-lg px-4 py-2 fw-bold">
-                            Get Started
-                        </a>
-                        <a th:href="@{/auth/login}" class="btn btn-outline-light btn-lg px-4 py-2">
-                            Sign In
-                        </a>
-                    </div>
+    <section class="relative px-[5%] py-24 overflow-hidden">
+        <div class="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-7 z-10">
+                <span class="font-label-caps text-label-caps text-primary tracking-widest block mb-4">A NEW STANDARD FOR WORK</span>
+                <h1 class="font-headline-lg text-6xl lg:text-7xl leading-tight mb-6 tracking-tight">Connect Talent with <span class="text-primary italic">Opportunity</span></h1>
+                <p class="font-body-lg text-on-surface-variant max-w-xl text-lg mb-10">FindJob brings together freelancers and clients in a trusted community where skills are verified, reputation matters, and great work gets rewarded.</p>
+                <div class="flex flex-wrap gap-4">
+                    <a th:href="@{/auth/register}" class="px-8 py-4 bg-primary text-on-primary rounded-lg font-bold hover:shadow-lg transition-all transform hover:-translate-y-1 inline-flex items-center justify-center">Get Started</a>
+                    <a th:href="@{/auth/login}" class="px-8 py-4 border-2 border-outline text-on-surface rounded-lg font-bold hover:bg-surface-container transition-all inline-flex items-center justify-center">Sign In</a>
                 </div>
-                
-                <!-- Right Illustration -->
-                <div class="col-lg-6 text-center">
-                    <div class="illustration-placeholder">
-                        <i class="fas fa-users fa-10x text-light opacity-25"></i>
+            </div>
+            <div class="lg:col-span-5 relative">
+                <div class="aspect-square rounded-full bg-secondary-container/20 absolute -top-12 -right-12 blur-3xl w-full h-full"></div>
+                <div class="relative glass-card rounded-xl p-4 shadow-2xl transform rotate-3">
+                    <img class="w-full h-[400px] object-cover rounded-lg shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJaVxBvfm9ACzQSTlgDmHpTzdH8tcztZqUIGjiYI9b_fajmUNMu2EtaehbBgmxsvW86x9kUTW7-JE7aFxhYGTmpM8BDaOfj8JmFHx12LnFD23lXZgZV31AEaVSCgUHpX3Z5vQ_8bVvCLtXCeQEaDT32gEMgsksamY7D2zHfbYQt8uooWD8KkkzfzrLd_a7DGF7_cWRRE0xmy1JnjN4KVyzyFNIiZTAL4EQz6dXti_TSnh0v1NGIY-F"/>
+                    <div class="absolute -bottom-6 -left-6 glass-card p-6 rounded-lg shadow-xl max-w-[200px]">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="material-symbols-outlined text-accent-amber" style="font-variation-settings: 'FILL' 1;">stars</span>
+                            <span class="font-bold text-sm">Top Rated</span>
+                        </div>
+                        <p class="text-xs text-on-surface-variant">Trusted by 50k+ enterprises worldwide.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Features Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold mb-3">Why Choose FindJob?</h2>
-                <p class="lead text-muted">We combine the best of job marketplaces with professional networking</p>
+    <!-- Why Choose FindJob (Bento Grid) -->
+    <section class="bg-surface-container-low px-[5%] py-section-margin">
+        <div class="max-w-[1440px] mx-auto">
+            <div class="mb-16 text-center max-w-2xl mx-auto">
+                <h2 class="font-headline-lg text-headline-lg mb-4">Why Choose FindJob?</h2>
+                <p class="text-on-surface-variant font-body-lg">We combine the best of job marketplaces with professional networking to create a superior hiring experience.</p>
             </div>
-            
-            <div class="row g-4">
-                <!-- Feature 1 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card h-100 p-4 rounded-3 bg-white shadow-sm text-center">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-shield-alt fa-3x text-primary"></i>
-                        </div>
-                        <h4>Verified Talent</h4>
-                        <p class="text-muted">
-                            Skills are endorsed by peers and verified by experts. Know exactly what you're hiring.
-                        </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
+                <div class="col-span-1 md:col-span-2 lg:col-span-7 glass-card p-10 rounded-xl flex flex-col justify-between hover:shadow-md transition-all group">
+                    <div>
+                        <span class="material-symbols-outlined text-4xl text-primary mb-6 group-hover:scale-110 transition-transform block">verified_user</span>
+                        <h3 class="font-headline-md text-headline-md mb-4">Verified Talent</h3>
+                        <p class="text-on-surface-variant font-body-lg max-w-md">Skills are endorsed by peers and verified by experts. Know exactly who you're hiring with our rigorous vetting process that ensures quality at every level.</p>
+                    </div>
+                    <div class="mt-12 flex gap-4">
+                        <span class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">KYC VERIFIED</span>
+                        <span class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">SKILL TESTED</span>
                     </div>
                 </div>
-                
-                <!-- Feature 2 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card h-100 p-4 rounded-3 bg-white shadow-sm text-center">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-star fa-3x text-warning"></i>
+                <div class="col-span-1 md:col-span-2 lg:col-span-5 bg-surface-container-high p-8 rounded-xl hover:bg-surface-container-highest transition-all">
+                    <span class="material-symbols-outlined text-3xl text-accent-amber mb-4" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+                    <h3 class="font-headline-md text-xl mb-3">Built-in Reputation</h3>
+                    <p class="text-on-surface-variant font-body-lg">Transparent ratings, endorsements, and portfolio showcase build lasting professional reputation that travels with you.</p>
+                </div>
+                <div class="col-span-1 md:col-span-1 lg:col-span-4 bg-surface-container-high p-8 rounded-xl hover:bg-surface-container-highest transition-all">
+                    <span class="material-symbols-outlined text-3xl text-secondary mb-4">psychology</span>
+                    <h3 class="font-headline-md text-xl mb-3">Smart Matching</h3>
+                    <p class="text-on-surface-variant font-body-lg">AI-driven engine that finds jobs matching your verified skills and helps clients find the perfect freelancer effortlessly.</p>
+                </div>
+                <div class="col-span-1 md:col-span-1 lg:col-span-4 bg-surface-container-high p-8 rounded-xl hover:bg-surface-container-highest transition-all">
+                    <span class="material-symbols-outlined text-3xl text-primary mb-4">chat_bubble</span>
+                    <h3 class="font-headline-md text-xl mb-3">Direct Messaging</h3>
+                    <p class="text-on-surface-variant font-body-lg">Communicate directly with clients or freelancers. No middleman, just clear, real-time professional communication.</p>
+                </div>
+                <div class="col-span-1 md:col-span-1 lg:col-span-4 bg-surface-container-high p-8 rounded-xl hover:bg-surface-container-highest transition-all">
+                    <span class="material-symbols-outlined text-3xl text-tertiary mb-4">handshake</span>
+                    <h3 class="font-headline-md text-xl mb-3">Trusted Community</h3>
+                    <p class="text-on-surface-variant font-body-lg">Build lasting relationships in a secure community that values quality work, transparency, and fair business practices.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- How It Works (Asymmetric Layout) -->
+    <section class="px-[5%] py-section-margin">
+        <div class="max-w-[1440px] mx-auto">
+            <div class="mb-20">
+                <h2 class="font-headline-lg text-5xl mb-4 tracking-tighter">How It Works</h2>
+                <div class="h-1 w-24 bg-primary"></div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-24">
+                <div>
+                    <div class="flex items-center gap-4 mb-12">
+                        <span class="material-symbols-outlined text-primary text-3xl">laptop_mac</span>
+                        <h3 class="font-headline-md text-3xl">For Freelancers</h3>
+                    </div>
+                    <div class="space-y-12">
+                        <div class="flex gap-6 group">
+                            <span class="text-6xl font-black text-outline-variant group-hover:text-primary transition-colors">01</span>
+                            <div>
+                                <h4 class="font-bold text-xl mb-2">Create Your Profile</h4>
+                                <p class="text-on-surface-variant">Sign up and showcase your skills, experience, and portfolio. Use our verification tools to stand out from the crowd.</p>
+                            </div>
                         </div>
-                        <h4>Built-in Reputation</h4>
-                        <p class="text-muted">
-                            Transparent ratings, endorsements, and portfolio showcase build lasting professional reputation.
-                        </p>
+                        <div class="flex gap-6 group">
+                            <span class="text-6xl font-black text-outline-variant group-hover:text-primary transition-colors">02</span>
+                            <div>
+                                <h4 class="font-bold text-xl mb-2">Get Endorsed &amp; Build Rep</h4>
+                                <p class="text-on-surface-variant">Receive skill endorsements from peers. Complete projects with high ratings to climb the reputation tiers.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6 group">
+                            <span class="text-6xl font-black text-outline-variant group-hover:text-primary transition-colors">03</span>
+                            <div>
+                                <h4 class="font-bold text-xl mb-2">Land Better Jobs</h4>
+                                <p class="text-on-surface-variant">Your verified reputation opens doors to premium projects and higher rates from top-tier corporate clients.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- Feature 3 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card h-100 p-4 rounded-3 bg-white shadow-sm text-center">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-briefcase fa-3x text-success"></i>
-                        </div>
-                        <h4>Smart Matching</h4>
-                        <p class="text-muted">
-                            Find jobs that match your verified skills. Clients find freelancers that fit their needs perfectly.
-                        </p>
+                <div class="lg:mt-24">
+                    <div class="flex items-center gap-4 mb-12">
+                        <span class="material-symbols-outlined text-secondary text-3xl">business_center</span>
+                        <h3 class="font-headline-md text-3xl">For Clients</h3>
                     </div>
-                </div>
-                
-                <!-- Feature 4 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card h-100 p-4 rounded-3 bg-white shadow-sm text-center">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-comments fa-3x text-info"></i>
+                    <div class="space-y-12">
+                        <div class="flex gap-6 group">
+                            <span class="text-6xl font-black text-outline-variant group-hover:text-secondary transition-colors">01</span>
+                            <div>
+                                <h4 class="font-bold text-xl mb-2">Post Your Job</h4>
+                                <p class="text-on-surface-variant">Describe what you need, set your budget, and specify required skills. Our smart matching engine does the rest.</p>
+                            </div>
                         </div>
-                        <h4>Direct Messaging</h4>
-                        <p class="text-muted">
-                            Communicate directly with clients or freelancers. No middleman, just clear communication.
-                        </p>
-                    </div>
-                </div>
-                
-                <!-- Feature 5 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card h-100 p-4 rounded-3 bg-white shadow-sm text-center">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-chart-line fa-3x text-danger"></i>
+                        <div class="flex gap-6 group">
+                            <span class="text-6xl font-black text-outline-variant group-hover:text-secondary transition-colors">02</span>
+                            <div>
+                                <h4 class="font-bold text-xl mb-2">Review Verified Talent</h4>
+                                <p class="text-on-surface-variant">Browse proposals from verified freelancers with proven track records. Compare data-backed reputation scores.</p>
+                            </div>
                         </div>
-                        <h4>Tier System</h4>
-                        <p class="text-muted">
-                            Climb from Beginner to Top Rated as you build your reputation and complete projects.
-                        </p>
-                    </div>
-                </div>
-                
-                <!-- Feature 6 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card h-100 p-4 rounded-3 bg-white shadow-sm text-center">
-                        <div class="feature-icon mb-3">
-                            <i class="fas fa-handshake fa-3x text-primary"></i>
+                        <div class="flex gap-6 group">
+                            <span class="text-6xl font-black text-outline-variant group-hover:text-secondary transition-colors">03</span>
+                            <div>
+                                <h4 class="font-bold text-xl mb-2">Hire with Confidence</h4>
+                                <p class="text-on-surface-variant">Select the best candidate and collaborate through our secure messaging and milestone-based payment system.</p>
+                            </div>
                         </div>
-                        <h4>Trusted Community</h4>
-                        <p class="text-muted">
-                            Build lasting relationships in a community that values quality work and fair practices.
-                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- How It Works Section -->
-    <section class="py-5">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold mb-3">How It Works</h2>
+    <!-- Reputation Tiers (Premium Ranking System) -->
+    <section class="bg-ink-black text-paper-white px-[5%] py-section-margin relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-1/2 h-full opacity-10"></div>
+        <div class="max-w-[1440px] mx-auto relative z-10">
+            <div class="mb-16">
+                <h2 class="font-headline-lg text-4xl mb-4">Reputation Tiers</h2>
+                <p class="text-on-secondary-fixed-variant max-w-lg">Progress from Beginner to Top Rated as you build your career on FindJob. Each tier unlocks exclusive benefits and higher visibility.</p>
             </div>
-            
-            <div class="row">
-                <!-- For Freelancers -->
-                <div class="col-lg-6 mb-5 mb-lg-0">
-                    <h4 class="text-primary mb-4">
-                        <i class="fas fa-laptop"></i> For Freelancers
-                    </h4>
-                    <div class="step-item mb-4">
-                        <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                            1
-                        </div>
-                        <h5 class="mt-3">Create Your Profile</h5>
-                        <p class="text-muted">Sign up and showcase your skills, experience, and portfolio.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="border border-white/10 p-8 rounded-xl bg-white/5 backdrop-blur-sm group hover:bg-white/10 transition-all">
+                    <div class="mb-8">
+                        <span class="material-symbols-outlined text-4xl text-outline mb-2">stat_0</span>
+                        <h4 class="text-2xl font-bold">Beginner</h4>
+                        <p class="text-sm text-white/50">Starting your journey</p>
                     </div>
-                    
-                    <div class="step-item mb-4">
-                        <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                            2
-                        </div>
-                        <h5 class="mt-3">Get Endorsed & Build Rep</h5>
-                        <p class="text-muted">Receive skill endorsements from peers. Complete jobs and earn ratings.</p>
-                    </div>
-                    
-                    <div class="step-item">
-                        <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                            3
-                        </div>
-                        <h5 class="mt-3">Land Better Jobs</h5>
-                        <p class="text-muted">Your verified reputation opens doors to premium projects and higher rates.</p>
-                    </div>
-                </div>
-                
-                <!-- For Clients -->
-                <div class="col-lg-6">
-                    <h4 class="text-success mb-4">
-                        <i class="fas fa-chart-bar"></i> For Clients
-                    </h4>
-                    <div class="step-item mb-4">
-                        <div class="step-number bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                            1
-                        </div>
-                        <h5 class="mt-3">Post Your Job</h5>
-                        <p class="text-muted">Describe what you need, set your budget, and specify required skills.</p>
-                    </div>
-                    
-                    <div class="step-item mb-4">
-                        <div class="step-number bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                            2
-                        </div>
-                        <h5 class="mt-3">Review Verified Talent</h5>
-                        <p class="text-muted">Browse proposals from verified freelancers with proven track records.</p>
-                    </div>
-                    
-                    <div class="step-item">
-                        <div class="step-number bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                            3
-                        </div>
-                        <h5 class="mt-3">Hire with Confidence</h5>
-                        <p class="text-muted">Select the best candidate and collaborate through our messaging system.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tier System Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold mb-3">Reputation Tiers</h2>
-                <p class="lead text-muted">Progress from Beginner to Top Rated as you build your career</p>
-            </div>
-            
-            <div class="row g-4">
-                <!-- Beginner -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="tier-card p-4 rounded-3 bg-white shadow-sm text-center">
-                        <i class="fas fa-star fa-2x text-warning mb-3"></i>
-                        <h5>Beginner</h5>
-                        <p class="small text-muted">0-50 projects</p>
-                        <p class="small text-muted">3.5+ rating</p>
-                        <p class="text-muted">Starting your journey</p>
-                    </div>
-                </div>
-                
-                <!-- Intermediate -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="tier-card p-4 rounded-3 bg-white shadow-sm text-center border-3 border-info">
-                        <i class="fas fa-star fa-2x text-info mb-3"></i>
-                        <h5>Intermediate</h5>
-                        <p class="small text-muted">50-150 projects</p>
-                        <p class="small text-muted">4.0+ rating</p>
-                        <p class="text-muted">Proven professional</p>
-                    </div>
-                </div>
-                
-                <!-- Expert -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="tier-card p-4 rounded-3 bg-white shadow-sm text-center">
-                        <i class="fas fa-star fa-2x text-danger mb-3"></i>
-                        <h5>Expert</h5>
-                        <p class="small text-muted">150+ projects</p>
-                        <p class="small text-muted">4.2+ rating</p>
-                        <p class="text-muted">Highly skilled</p>
-                    </div>
-                </div>
-                
-                <!-- Top Rated -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="tier-card p-4 rounded-3 bg-white shadow-sm text-center">
-                        <i class="fas fa-star fa-2x text-success mb-3"></i>
-                        <h5>Top Rated</h5>
-                        <p class="small text-muted">200+ projects</p>
-                        <p class="small text-muted">4.5+ rating</p>
-                        <p class="text-muted">Elite performer</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-5 bg-primary text-white">
-        <div class="container text-center">
-            <h2 class="display-5 fw-bold mb-4">Ready to Get Started?</h2>
-            <p class="lead mb-4">
-                Join thousands of freelancers and clients building successful careers on FindJob.
-            </p>
-            <div class="d-grid gap-2 d-sm-flex justify-content-center">
-                <a th:href="@{/auth/register}" class="btn btn-light btn-lg px-5 py-2 fw-bold">
-                    Join Now
-                </a>
-                <a th:href="@{/auth/login}" class="btn btn-outline-light btn-lg px-5 py-2">
-                    Already a Member?
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-light py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <h5><i class="fas fa-briefcase text-primary"></i> FindJob</h5>
-                    <p class="small text-muted">
-                        Connecting talented freelancers with businesses worldwide.
-                    </p>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <h5>Links</h5>
-                    <ul class="list-unstyled small">
-                        <li><a href="#" class="text-muted text-decoration-none">For Freelancers</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">For Clients</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">Contact Us</a></li>
+                    <ul class="space-y-4 border-t border-white/10 pt-6">
+                        <li class="flex justify-between text-sm">
+                            <span class="text-white/60">Projects</span>
+                            <span class="font-bold">0-50</span>
+                        </li>
+                        <li class="flex justify-between text-sm">
+                            <span class="text-white/60">Rating</span>
+                            <span class="font-bold">3.5+</span>
+                        </li>
                     </ul>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <h5>Legal</h5>
-                    <ul class="list-unstyled small">
-                        <li><a href="#" class="text-muted text-decoration-none">Terms</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">Privacy</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">FAQ</a></li>
+                <div class="border border-primary/30 p-8 rounded-xl bg-primary/5 backdrop-blur-sm group hover:bg-primary/10 transition-all">
+                    <div class="mb-8">
+                        <span class="material-symbols-outlined text-4xl text-primary-fixed mb-2">stat_1</span>
+                        <h4 class="text-2xl font-bold">Intermediate</h4>
+                        <p class="text-sm text-primary-fixed/50">Proven professional</p>
+                    </div>
+                    <ul class="space-y-4 border-t border-white/10 pt-6">
+                        <li class="flex justify-between text-sm">
+                            <span class="text-white/60">Projects</span>
+                            <span class="font-bold">50-150</span>
+                        </li>
+                        <li class="flex justify-between text-sm">
+                            <span class="text-white/60">Rating</span>
+                            <span class="font-bold">4.0+</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="border border-tertiary/30 p-8 rounded-xl bg-tertiary/5 backdrop-blur-sm group hover:bg-tertiary/10 transition-all">
+                    <div class="mb-8">
+                        <span class="material-symbols-outlined text-4xl text-tertiary-fixed mb-2">stat_2</span>
+                        <h4 class="text-2xl font-bold">Expert</h4>
+                        <p class="text-sm text-tertiary-fixed/50">Highly skilled</p>
+                    </div>
+                    <ul class="space-y-4 border-t border-white/10 pt-6">
+                        <li class="flex justify-between text-sm">
+                            <span class="text-white/60">Projects</span>
+                            <span class="font-bold">150+</span>
+                        </li>
+                        <li class="flex justify-between text-sm">
+                            <span class="text-white/60">Rating</span>
+                            <span class="font-bold">4.2+</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="border-2 border-accent-amber p-8 rounded-xl bg-accent-amber/5 backdrop-blur-sm relative overflow-hidden group hover:scale-[1.02] transition-all">
+                    <div class="absolute -top-4 -right-4 bg-accent-amber text-ink-black px-8 py-1 rotate-45 text-[10px] font-bold tracking-tighter">PREMIUM</div>
+                    <div class="mb-8">
+                        <span class="material-symbols-outlined text-4xl text-accent-amber mb-2" style="font-variation-settings: 'FILL' 1;">stars</span>
+                        <h4 class="text-2xl font-bold text-accent-amber">Top Rated</h4>
+                        <p class="text-sm text-accent-amber/70">Elite performer</p>
+                    </div>
+                    <ul class="space-y-4 border-t border-accent-amber/30 pt-6">
+                        <li class="flex justify-between text-sm">
+                            <span class="text-white/60">Projects</span>
+                            <span class="font-bold text-accent-amber">200+</span>
+                        </li>
+                        <li class="flex justify-between text-sm">
+                            <span class="text-white/60">Rating</span>
+                            <span class="font-bold text-accent-amber">4.5+</span>
+                        </li>
                     </ul>
                 </div>
             </div>
-            <hr class="bg-secondary">
-            <div class="text-center small text-muted">
-                <p>&copy; 2026 FindJob. All rights reserved.</p>
+        </div>
+    </section>
+    <!-- Final CTA -->
+    <section class="bg-primary px-[5%] py-24 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="font-headline-lg text-5xl text-on-primary mb-6">Ready to Get Started?</h2>
+            <p class="text-on-primary/80 font-body-lg mb-12 max-w-xl mx-auto">Join thousands of freelancers and clients building successful careers and businesses on FindJob.</p>
+            <div class="flex flex-wrap justify-center gap-6">
+                <button class="px-12 py-5 bg-paper-white text-primary rounded-lg font-black text-lg hover:shadow-2xl transition-all transform hover:scale-105">Join Now</button>
+                <button class="px-12 py-5 border-2 border-paper-white text-on-primary rounded-lg font-bold text-lg hover:bg-paper-white/10 transition-all">Already a Member?</button>
             </div>
         </div>
-    </footer>
+    </section>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+<script>
+    // Simple scroll animation for reveal effect
+    const observerOptions = {
+        threshold: 0.1
+    };
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('opacity-100', 'translate-y-0');
+                entry.target.classList.remove('opacity-0', 'translate-y-8');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.bento-grid > div, .space-y-12 > div').forEach(el => {
+        el.classList.add('opacity-0', 'translate-y-8', 'transition-all', 'duration-700', 'ease-out');
+        observer.observe(el);
+    });
+</script>
 </body>
 </html>

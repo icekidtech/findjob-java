@@ -22,11 +22,11 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "jobs", indexes = {
-    @Index(name = "idx_client_id", columnList = "client_id"),
+    @Index(name = "idx_job_client_id", columnList = "client_id"),
     @Index(name = "idx_job_status", columnList = "job_status"),
-    @Index(name = "idx_category", columnList = "category"),
-    @Index(name = "idx_posted_at", columnList = "posted_at"),
-    @Index(name = "idx_deadline", columnList = "deadline")
+    @Index(name = "idx_job_category", columnList = "category"),
+    @Index(name = "idx_job_posted_at", columnList = "posted_at"),
+    @Index(name = "idx_job_deadline", columnList = "deadline")
 })
 @Data
 @NoArgsConstructor
