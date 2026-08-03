@@ -153,7 +153,7 @@
             <div class="card-header">
                 <h2><i class="fas fa-user-circle"></i> Complete Your Profile</h2>
                 <p>Help us learn more about you to get better job matches</p>
-                <span class="role-badge" th:text="${user.getUserRole().getDisplayName()}">
+                <span class="role-badge" th:text="${user.userRole.displayName}">
                     Freelancer
                 </span>
             </div>
@@ -322,13 +322,13 @@
     <!-- Form Handling -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const userRole = document.querySelector('.role-badge').textContent.trim();
+            const roleBadgeText = document.querySelector('.role-badge').textContent.trim();
             
-            if (userRole === 'Freelancer') {
+            if (roleBadgeText === 'Freelancer') {
                 document.querySelectorAll('.freelancer-only').forEach(el => {
                     el.classList.add('show');
                 });
-            } else if (userRole === 'Client') {
+            } else if (roleBadgeText === 'Client') {
                 document.querySelectorAll('.client-only').forEach(el => {
                     el.classList.add('show');
                 });

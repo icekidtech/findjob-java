@@ -397,7 +397,7 @@
             <div class="col-lg-4">
                 <div class="sidebar">
                     <!-- Apply Card - Only show to Freelancers -->
-                    <div class="apply-card" th:if="${#authorization.hasRole('ROLE_FREELANCER')}">
+                    <div class="apply-card" th:if="${userRole == 'ROLE_FREELANCER'}">
                         <div class="budget-display" th:text="${job.currency.symbol} + ' ' + ${job.budgetAmount}">₦5000</div>
                         <div class="budget-label" th:text="${job.budgetType == 'FIXED' ? 'Fixed Price' : 'Hourly Rate'}">Fixed Price</div>
                         
@@ -421,7 +421,7 @@
                     </div>
 
                     <!-- Client View Card - Only show to Job Owner -->
-                    <div class="apply-card" th:if="${#authorization.hasRole('ROLE_CLIENT')}">
+                    <div class="apply-card" th:if="${userRole == 'ROLE_CLIENT'}">
                         <div class="budget-display" th:text="${job.currency.symbol} + ' ' + ${job.budgetAmount}">₦5000</div>
                         <div class="budget-label" th:text="${job.budgetType == 'FIXED' ? 'Fixed Price' : 'Hourly Rate'}">Fixed Price</div>
                         

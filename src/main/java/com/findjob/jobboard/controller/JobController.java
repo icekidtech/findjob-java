@@ -88,7 +88,7 @@ public class JobController {
      * View job details
      */
     @GetMapping("/{id}")
-    public String viewJob(@PathVariable Long id, Model model) {
+    public String viewJob(@PathVariable Long id, Authentication authentication, Model model) {
         try {
             Job job = jobService.getJobById(id);
             
@@ -100,9 +100,20 @@ public class JobController {
             // Increment views
             jobService.incrementViews(id);
             
+            // Add user role to model
+            String userRole = "GUEST";
+            if (authentication != null && authentication.isAuthenticated()) {
+                userRole = authentication.getAuthorities().stream()
+                        .map(auth -> auth.getAuthority())
+                        .filter(auth -> auth.startsWith("ROLE_"))
+                        .findFirst()
+                        .orElse("GUEST");
+            }
+            
             model.addAttribute("title", job.getTitle());
             model.addAttribute("job", job);
             model.addAttribute("client", job.getClient());
+            model.addAttribute("userRole", userRole);
             
             return "jobs/detail";
             
