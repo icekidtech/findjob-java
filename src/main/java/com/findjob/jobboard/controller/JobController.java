@@ -17,7 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.findjob.jobboard.service.CloudinaryService;
+import com.findjob.jobboard.service.FileStorageService;
 
 import jakarta.validation.Valid;
 import java.util.List;
@@ -44,7 +44,7 @@ public class JobController {
     private JobViewService jobViewService;
     
     @Autowired
-    private CloudinaryService cloudinaryService;
+    private FileStorageService fileStorageService;
     
     // ==========================================
     // Job Listing & Browsing
@@ -360,13 +360,13 @@ public class JobController {
                 return "redirect:/jobs/" + jobId;
             }
             
-            // Handle CV file upload to Cloudinary
+            // Handle CV file upload locally
             String cvFileUrl_str = null;
             if (cvFileUrl != null && !cvFileUrl.isEmpty()) {
                 try {
-                    cvFileUrl_str = cloudinaryService.uploadCVFile(cvFileUrl);
+                    cvFileUrl_str = fileStorageService.saveCVFile(cvFileUrl);
                 } catch (Exception e) {
-                    System.err.println("Error uploading CV file to Cloudinary: " + e.getMessage());
+                    System.err.println("Error uploading CV file: " + e.getMessage());
                     redirectAttributes.addFlashAttribute("warning", "CV file could not be uploaded, but application was submitted");
                 }
             }
