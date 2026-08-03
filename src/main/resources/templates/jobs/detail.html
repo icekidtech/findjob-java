@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${job.getTitle()} + ' - FindJob'">Job Details</title>
+    <title th:text="${job.title} + ' - FindJob'">Job Details</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -312,14 +312,14 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="job-title-section">
-                        <span class="badge bg-success" th:text="${job.getStatus()}">OPEN</span>
-                        <h1 th:text="${job.getTitle()}">Job Title</h1>
+                        <span class="badge bg-success" th:text="${job.jobStatus}">OPEN</span>
+                        <h1 th:text="${job.title}">Job Title</h1>
                         
                         <!-- Client Info -->
                         <div class="client-info">
-                            <div class="client-avatar" th:text="${job.getClient().getFirstName().substring(0, 1)}">C</div>
+                            <div class="client-avatar" th:text="${job.client.firstName.substring(0, 1)}">C</div>
                             <div class="client-details">
-                                <h6 th:text="${job.getClient().getFirstName() + ' ' + job.getClient().getLastName()}">Client Name</h6>
+                                <h6 th:text="${job.client.firstName + ' ' + job.client.lastName}">Client Name</h6>
                                 <small>
                                     <span class="rating">
                                         <i class="fas fa-star"></i>
@@ -328,7 +328,7 @@
                                         <i class="fas fa-star"></i>
                                         <i class="fas fa-star-half-alt"></i>
                                     </span>
-                                    <span th:text="${#numbers.formatDecimal(job.getClient().getReputationScore(), 1, 1)} + '/5'">4.5/5</span>
+                                    <span>★ Client</span>
                                 </small>
                             </div>
                         </div>
@@ -350,19 +350,19 @@
                     <div class="meta-grid">
                         <div class="meta-item">
                             <div class="meta-label">Budget</div>
-                            <div class="meta-value budget" th:text="${job.getBudgetType() == 'FIXED' ? '$' + job.getBudget() : '$' + job.getHourlyRate() + '/hr'}">$5000</div>
+                            <div class="meta-value budget" th:text="${job.currency.symbol} + ' ' + ${job.budgetAmount}">₦5000</div>
                         </div>
                         <div class="meta-item">
                             <div class="meta-label">Experience Level</div>
-                            <div class="meta-value" th:text="${job.getExperienceLevel()}">Intermediate</div>
+                            <div class="meta-value" th:text="${job.experienceLevel}">Intermediate</div>
                         </div>
                         <div class="meta-item">
                             <div class="meta-label">Posted</div>
-                            <div class="meta-value" th:text="${#temporals.format(job.getCreatedAt(), 'MMM dd, yyyy')}">Jan 15, 2026</div>
+                            <div class="meta-value" th:text="${#temporals.format(job.postedAt, 'MMM dd, yyyy')}">Jan 15, 2026</div>
                         </div>
                         <div class="meta-item">
-                            <div class="meta-label">Proposals</div>
-                            <div class="meta-value" th:text="${job.getApplications().size()}">12</div>
+                            <div class="meta-label">Type</div>
+                            <div class="meta-value" th:text="${job.budgetType}">Fixed</div>
                         </div>
                     </div>
                 </div>
@@ -370,60 +370,25 @@
                 <!-- Description -->
                 <div class="content-card">
                     <h3 class="section-title"><i class="fas fa-file-alt"></i> Description</h3>
-                    <p class="description" th:text="${job.getDescription()}">Job description goes here...</p>
+                    <p class="description" th:text="${job.description}">Job description goes here...</p>
                 </div>
 
-                <!-- Required Skills -->
+                <!-- Category & Duration -->
                 <div class="content-card">
-                    <h3 class="section-title"><i class="fas fa-star"></i> Required Skills</h3>
-                    <div>
-                        <span class="skill-badge" th:each="skill : ${job.getRequiredSkills()}" th:text="${skill.getSkillName()}">Skill</span>
-                    </div>
-                </div>
-
-                <!-- Project Timeline -->
-                <div class="content-card">
-                    <h3 class="section-title"><i class="fas fa-calendar"></i> Project Timeline</h3>
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <div class="timeline-marker"><i class="fas fa-flag"></i></div>
-                            <div class="timeline-content">
-                                <h6>Project Start</h6>
-                                <small th:text="${#temporals.format(job.getStartDate(), 'MMM dd, yyyy')}">January 20, 2026</small>
-                            </div>
+                    <h3 class="section-title"><i class="fas fa-info-circle"></i> Project Details</h3>
+                    <div class="meta-grid">
+                        <div class="meta-item">
+                            <div class="meta-label">Category</div>
+                            <div class="meta-value" th:text="${job.category}">Web Development</div>
                         </div>
-                        <div class="timeline-item">
-                            <div class="timeline-marker"><i class="fas fa-finish"></i></div>
-                            <div class="timeline-content">
-                                <h6>Project Deadline</h6>
-                                <small th:text="${#temporals.format(job.getDeadline(), 'MMM dd, yyyy')}">February 20, 2026</small>
-                            </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Duration</div>
+                            <div class="meta-value" th:text="${job.duration != null ? job.duration : 'Not specified'}">3-6 months</div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Applicants -->
-                <div class="content-card">
-                    <h3 class="section-title"><i class="fas fa-users"></i> Proposals Received</h3>
-                    
-                    <div th:if="${job.getApplications() != null and job.getApplications().size() > 0}">
-                        <div class="row" th:each="app : ${job.getApplications().subList(0, T(java.lang.Math).min(3, job.getApplications().size()))}">
-                            <div class="col-12 mb-3">
-                                <div style="display: flex; align-items: center; gap: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-                                    <div style="width: 50px; height: 50px; background: #667eea; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">
-                                        <span th:text="${app.getFreelancer().getFirstName().substring(0, 1)}">F</span>
-                                    </div>
-                                    <div style="flex: 1;">
-                                        <h6 style="margin: 0; font-weight: 600;" th:text="${app.getFreelancer().getFirstName() + ' ' + app.getFreelancer().getLastName()}">Freelancer Name</h6>
-                                        <small class="text-muted" th:text="${app.getProposalMessage()}">Proposal message...</small>
-                                    </div>
-                                    <small class="text-muted" th:text="${#temporals.format(app.getCreatedAt(), 'MMM dd')}">Jan 15</small>
-                                </div>
-                            </div>
+                        <div th:if="${job.deadline != null}" class="meta-item">
+                            <div class="meta-label">Deadline</div>
+                            <div class="meta-value" th:text="${#temporals.format(job.deadline, 'MMM dd, yyyy')}">Feb 20, 2026</div>
                         </div>
-                    </div>
-                    <div th:if="${job.getApplications() == null or job.getApplications().size() == 0}">
-                        <p class="text-muted mb-0">No proposals yet. Be the first to apply!</p>
                     </div>
                 </div>
             </div>
@@ -431,12 +396,12 @@
             <!-- Sidebar -->
             <div class="col-lg-4">
                 <div class="sidebar">
-                    <!-- Apply Card -->
-                    <div class="apply-card">
-                        <div class="budget-display" th:text="${job.getBudgetType() == 'FIXED' ? '$' + job.getBudget() : '$' + job.getHourlyRate()}">$5000</div>
-                        <div class="budget-label" th:text="${job.getBudgetType() == 'FIXED' ? 'Fixed Price' : 'Hourly Rate'}">Fixed Price</div>
+                    <!-- Apply Card - Only show to Freelancers -->
+                    <div class="apply-card" th:if="${#authorization.hasRole('ROLE_FREELANCER')}">
+                        <div class="budget-display" th:text="${job.currency.symbol} + ' ' + ${job.budgetAmount}">₦5000</div>
+                        <div class="budget-label" th:text="${job.budgetType == 'FIXED' ? 'Fixed Price' : 'Hourly Rate'}">Fixed Price</div>
                         
-                        <a th:href="@{'/jobs/' + ${job.getId()} + '/apply'}" class="btn btn-apply">
+                        <a th:href="@{'/jobs/' + ${job.id} + '/apply'}" class="btn btn-apply">
                             <i class="fas fa-paper-plane"></i> Submit Proposal
                         </a>
                         <button class="btn btn-save">
@@ -446,11 +411,28 @@
                         <div class="job-stats">
                             <div class="stat-small">
                                 <span>Proposals</span>
-                                <strong th:text="${job.getApplications().size()}">12</strong>
+                                <strong th:text="${job.applicationsCount}">12</strong>
                             </div>
                             <div class="stat-small">
                                 <span>Views</span>
-                                <strong>248</strong>
+                                <strong th:text="${job.viewsCount}">248</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Client View Card - Only show to Job Owner -->
+                    <div class="apply-card" th:if="${#authorization.hasRole('ROLE_CLIENT')}">
+                        <div class="budget-display" th:text="${job.currency.symbol} + ' ' + ${job.budgetAmount}">₦5000</div>
+                        <div class="budget-label" th:text="${job.budgetType == 'FIXED' ? 'Fixed Price' : 'Hourly Rate'}">Fixed Price</div>
+                        
+                        <div class="job-stats">
+                            <div class="stat-small">
+                                <span>Proposals</span>
+                                <strong th:text="${job.applicationsCount}">12</strong>
+                            </div>
+                            <div class="stat-small">
+                                <span>Views</span>
+                                <strong th:text="${job.viewsCount}">248</strong>
                             </div>
                         </div>
                     </div>
@@ -460,16 +442,16 @@
                         <h6 style="text-align: left; margin-bottom: 15px;"><i class="fas fa-info-circle"></i> Job Info</h6>
                         <div style="text-align: left;">
                             <p class="mb-2">
-                                <strong>Category:</strong><br>
-                                <small class="text-muted" th:text="${job.getCategory()}">Web Development</small>
+                                <strong>Status:</strong><br>
+                                <small class="text-muted badge bg-success" th:text="${job.jobStatus}">Open</small>
                             </p>
                             <p class="mb-2">
-                                <strong>Location:</strong><br>
-                                <small class="text-muted" th:text="${job.getLocation() != null ? job.getLocation() : 'Remote'}">Remote</small>
+                                <strong>Experience Level:</strong><br>
+                                <small class="text-muted" th:text="${job.experienceLevel}">Intermediate</small>
                             </p>
                             <p class="mb-0">
-                                <strong>Status:</strong><br>
-                                <small class="text-muted badge bg-success" th:text="${job.getStatus()}">Open</small>
+                                <strong>Published:</strong><br>
+                                <small class="text-muted" th:text="${job.isPublished ? 'Yes' : 'No'}">Yes</small>
                             </p>
                         </div>
                     </div>

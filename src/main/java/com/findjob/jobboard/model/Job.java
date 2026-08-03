@@ -99,12 +99,15 @@ public class Job {
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private JobStatus jobStatus = JobStatus.OPEN; // OPEN, IN_PROGRESS, COMPLETED, CANCELLED
     
     @Column(nullable = false)
+    @Builder.Default
     private Boolean isPublished = true; // Whether job is visible to freelancers
     
     @Column(nullable = false)
+    @Builder.Default
     private Boolean isFeatured = false; // Highlighted in search
     
     // ==========================================
@@ -112,12 +115,15 @@ public class Job {
     // ==========================================
     
     @Column(nullable = false)
+    @Builder.Default
     private Integer viewsCount = 0;
     
     @Column(nullable = false)
+    @Builder.Default
     private Integer applicationsCount = 0;
     
     @Column(nullable = false)
+    @Builder.Default
     private Integer savesCount = 0;
     
     // ==========================================

@@ -427,7 +427,7 @@
                                     <span class="input-group-text" id="currencySymbolHourly">₦</span>
                                     <input type="number" class="form-control" id="budgetHourly" name="budget" 
                                            placeholder="5000" min="0.1" step="0.01"
-                                           th:value="*{budget}" required>
+                                           th:value="*{budget}">
                                     <span class="input-group-text">/hr</span>
                                 </div>
                                 <small class="text-muted">Rate per hour</small>
@@ -564,15 +564,15 @@
         document.getElementById('budgetFixed').addEventListener('change', function() {
             document.getElementById('fixedBudgetSection').style.display = 'block';
             document.getElementById('hourlyBudgetSection').style.display = 'none';
-            document.getElementById('budget').required = true;
-            document.getElementById('budgetHourly').required = false;
+            document.getElementById('budget').setAttribute('required', 'required');
+            document.getElementById('budgetHourly').removeAttribute('required');
         });
         
         document.getElementById('budgetHourly').addEventListener('change', function() {
             document.getElementById('fixedBudgetSection').style.display = 'none';
             document.getElementById('hourlyBudgetSection').style.display = 'block';
-            document.getElementById('budget').required = false;
-            document.getElementById('budgetHourly').required = true;
+            document.getElementById('budget').removeAttribute('required');
+            document.getElementById('budgetHourly').setAttribute('required', 'required');
         });
         
         // Character counter
