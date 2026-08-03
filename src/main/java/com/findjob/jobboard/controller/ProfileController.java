@@ -12,6 +12,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
 
+import java.util.UUID;
+
 /**
  * ProfileController - Handles user profile operations
  * Manages profile completion, viewing, and editing
@@ -101,7 +103,7 @@ public class ProfileController {
         try {
             User user = userService.getUserById(userId);
             
-            if (!user.getIsActive()) {
+            if (user == null || !user.getIsActive()) {
                 model.addAttribute("error", "This profile is no longer available");
                 return "error/404";
             }
@@ -157,6 +159,11 @@ public class ProfileController {
         try {
             User user = userService.getUserById(userId);
             
+            if (user == null) {
+                model.addAttribute("error", "User not found");
+                return "error/404";
+            }
+            
             // Verify user owns this profile
             if (authentication == null || !authentication.isAuthenticated()) {
                 return "redirect:/auth/login";
@@ -211,7 +218,7 @@ public class ProfileController {
             }
             
             // Update profile
-            User updatedUser = userService.updateProfile(userId, profileData);
+            userService.updateProfile(userId, profileData);
             
             redirectAttributes.addFlashAttribute("success", "Profile updated successfully!");
             

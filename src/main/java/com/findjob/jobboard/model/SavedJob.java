@@ -15,10 +15,10 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "saved_jobs", indexes = {
-    @Index(name = "idx_freelancer_id", columnList = "freelancer_id"),
-    @Index(name = "idx_job_id", columnList = "job_id"),
-    @Index(name = "idx_saved_at", columnList = "saved_at"),
-    @Index(name = "idx_freelancer_job", columnList = "freelancer_id, job_id", unique = true)
+    @Index(name = "idx_savedjob_freelancer_id", columnList = "freelancer_id"),
+    @Index(name = "idx_savedjob_job_id", columnList = "job_id"),
+    @Index(name = "idx_savedjob_saved_at", columnList = "saved_at"),
+    @Index(name = "idx_savedjob_freelancer_job", columnList = "freelancer_id, job_id", unique = true)
 })
 @Data
 @NoArgsConstructor

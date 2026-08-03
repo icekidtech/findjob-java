@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "endorsements", indexes = {
-    @Index(name = "idx_endorsement_endorser", columnList = "endorser_id"),
-    @Index(name = "idx_endorsement_endorsed_user", columnList = "endorsed_user_id"),
-    @Index(name = "idx_endorsement_skill", columnList = "skill_id"),
+    @Index(name = "idx_endorsement_endorser_id", columnList = "endorser_id"),
+    @Index(name = "idx_endorsement_endorsed_user_id", columnList = "endorsed_user_id"),
+    @Index(name = "idx_endorsement_skill_id", columnList = "skill_id"),
     @Index(name = "idx_endorsement_unique", columnList = "endorser_id,endorsed_user_id,skill_id", unique = true)
 })
 @Data

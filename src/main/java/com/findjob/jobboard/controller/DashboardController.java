@@ -1,14 +1,17 @@
 package com.findjob.jobboard.controller;
 
 import com.findjob.jobboard.model.User;
-import com.findjob.jobboard.model.UserRole;
+import com.findjob.jobboard.model.Job;
 import com.findjob.jobboard.service.UserService;
+import com.findjob.jobboard.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 /**
  * DashboardController - Handles dashboard pages for authenticated users
@@ -20,6 +23,9 @@ public class DashboardController {
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private JobRepository jobRepository;
     
     /**
      * Main dashboard route - redirects to appropriate dashboard based on user role
@@ -49,6 +55,10 @@ public class DashboardController {
             if (user.isFreelancer()) {
                 return "dashboard/freelancer";
             } else if (user.isClient()) {
+                // Get client's posted jobs
+                List<Job> postedJobs = jobRepository.findByClient(user);
+                model.addAttribute("postedJobs", postedJobs);
+                model.addAttribute("activeJobsCount", (int) postedJobs.stream().filter(j -> j.getJobStatus().name().equals("OPEN")).count());
                 return "dashboard/client";
             } else {
                 return "redirect:/";
@@ -115,7 +125,12 @@ public class DashboardController {
                 return "redirect:/dashboard/freelancer";
             }
             
+            // Get client's posted jobs
+            List<Job> postedJobs = jobRepository.findByClient(user);
+            
             model.addAttribute("user", user);
+            model.addAttribute("postedJobs", postedJobs);
+            model.addAttribute("activeJobsCount", (int) postedJobs.stream().filter(j -> j.getJobStatus().name().equals("OPEN")).count());
             model.addAttribute("title", "Client Dashboard");
             
             return "dashboard/client";
