@@ -4,6 +4,7 @@ import com.findjob.jobboard.dto.JobDTO;
 import com.findjob.jobboard.model.*;
 import com.findjob.jobboard.service.JobApplicationService;
 import com.findjob.jobboard.service.JobService;
+import com.findjob.jobboard.service.JobViewService;
 import com.findjob.jobboard.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -35,6 +37,9 @@ public class JobController {
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private JobViewService jobViewService;
     
     // ==========================================
     // Job Listing & Browsing
@@ -97,8 +102,21 @@ public class JobController {
                 return "error/404";
             }
             
-            // Increment views
-            jobService.incrementViews(id);
+            // Record view (only count unique views per user)
+            if (authentication != null && authentication.isAuthenticated()) {
+                User user = userService.findByEmail(authentication.getName());
+                boolean isNewView = jobViewService.recordView(job, user);
+                
+                // Only increment viewsCount if it's a new unique view
+                if (isNewView) {
+                    job.incrementViews();
+                    jobService.updateJob(job);
+                }
+            } else {
+                // Anonymous users always increment (no way to track)
+                job.incrementViews();
+                jobService.updateJob(job);
+            }
             
             // Add user role to model
             String userRole = "GUEST";
@@ -319,7 +337,8 @@ public class JobController {
      */
     @PostMapping("/{jobId}/apply")
     public String submitApplication(@PathVariable Long jobId,
-                                   @RequestParam String proposalMessage,
+                                   @RequestParam String coverLetter,
+                                   @RequestParam(required = false) String attachmentUrl,
                                    Authentication authentication,
                                    RedirectAttributes redirectAttributes) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -339,7 +358,8 @@ public class JobController {
             JobApplication application = new JobApplication();
             application.setJob(job);
             application.setFreelancer(freelancer);
-            application.setProposalMessage(proposalMessage);
+            application.setCoverLetter(coverLetter);
+            application.setAttachmentUrl(attachmentUrl);
             
             applicationService.submitApplication(application);
             
