@@ -239,9 +239,9 @@ public class Job {
     }
     
     /**
-     * Get budget range as string
+     * Get budget as string with currency
      */
-    public String getBudgetRange() {
-        return "$" + budgetMin + " - $" + budgetMax;
+    public String getBudgetDisplay() {
+        return currency.getSymbol() + budgetAmount;
     }
 }

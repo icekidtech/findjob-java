@@ -71,7 +71,6 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .sessionManagement(session -> session
-                        .sessionFixationProtection(org.springframework.security.config.http.SessionFixationProtectionStrategy.MIGRATE_SESSION)
                         .sessionConcurrency(concurrency -> concurrency
                                 .maximumSessions(1)
                                 .expiredUrl("/auth/login")
