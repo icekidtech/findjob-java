@@ -287,9 +287,71 @@ public class JobController {
     }
     
     /**
-     * View applications for a job
+     * Apply for a job (Show application form)
      */
-    @GetMapping("/{jobId}/applications")
+    @GetMapping("/{jobId}/apply")
+    public String showApplyForm(@PathVariable Long jobId, Authentication authentication, Model model) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/auth/login";
+        }
+        
+        try {
+            Job job = jobService.getJobById(jobId);
+            User freelancer = userService.findByEmail(authentication.getName());
+            
+            if (!freelancer.isFreelancer()) {
+                model.addAttribute("error", "Only freelancers can apply for jobs");
+                return "redirect:/jobs/" + jobId;
+            }
+            
+            model.addAttribute("job", job);
+            model.addAttribute("freelancer", freelancer);
+            return "jobs/apply";
+            
+        } catch (Exception e) {
+            model.addAttribute("error", "Error loading job: " + e.getMessage());
+            return "error/error";
+        }
+    }
+    
+    /**
+     * Submit job application
+     */
+    @PostMapping("/{jobId}/apply")
+    public String submitApplication(@PathVariable Long jobId,
+                                   @RequestParam String proposalMessage,
+                                   Authentication authentication,
+                                   RedirectAttributes redirectAttributes) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/auth/login";
+        }
+        
+        try {
+            Job job = jobService.getJobById(jobId);
+            User freelancer = userService.findByEmail(authentication.getName());
+            
+            if (!freelancer.isFreelancer()) {
+                redirectAttributes.addFlashAttribute("error", "Only freelancers can apply for jobs");
+                return "redirect:/jobs/" + jobId;
+            }
+            
+            // Create and submit application
+            JobApplication application = new JobApplication();
+            application.setJob(job);
+            application.setFreelancer(freelancer);
+            application.setProposalMessage(proposalMessage);
+            
+            applicationService.submitApplication(application);
+            
+            redirectAttributes.addFlashAttribute("success", "Application submitted successfully!");
+            return "redirect:/jobs/" + jobId;
+            
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to submit application: " + e.getMessage());
+            return "redirect:/jobs/" + jobId;
+        }
+    }
+    
     public String viewApplications(
             @PathVariable Long jobId,
             Authentication authentication,

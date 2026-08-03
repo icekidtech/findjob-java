@@ -206,6 +206,17 @@
             color: white;
         }
         
+        .btn-save.saved {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .btn-save.saved:hover {
+            background: #764ba2;
+            border-color: #764ba2;
+        }
+        
         .job-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -401,11 +412,14 @@
                         <div class="budget-display" th:text="${job.currency.symbol} + ' ' + ${job.budgetAmount}">₦5000</div>
                         <div class="budget-label" th:text="${job.budgetType == 'FIXED' ? 'Fixed Price' : 'Hourly Rate'}">Fixed Price</div>
                         
-                        <a th:href="@{'/jobs/' + ${job.id} + '/apply'}" class="btn btn-apply">
-                            <i class="fas fa-paper-plane"></i> Submit Proposal
-                        </a>
-                        <button class="btn btn-save">
-                            <i class="fas fa-bookmark"></i> Save Job
+                        <form th:action="@{'/jobs/' + ${job.id} + '/apply'}" method="GET" style="display: inline;">
+                            <button type="submit" class="btn btn-apply">
+                                <i class="fas fa-paper-plane"></i> Submit Proposal
+                            </button>
+                        </form>
+                        <button class="btn btn-save" id="saveJobBtn" th:data-job-id="${job.id}">
+                            <i class="fas fa-bookmark"></i> 
+                            <span id="saveJobText">Save Job</span>
                         </button>
                         
                         <div class="job-stats">
@@ -469,5 +483,102 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const jobId = document.querySelector('[th\\:data-job-id]')?.getAttribute('data-job-id') || 
+                      document.querySelector('[data-job-id]')?.getAttribute('data-job-id');
+        
+        // Check if job is already saved on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (jobId) {
+                checkJobSaved();
+            }
+        });
+        
+        // Check if job is saved
+        function checkJobSaved() {
+            fetch(`/saved-jobs/${jobId}/check`)
+                .then(response => response.json())
+                .then(data => {
+                    updateSaveButton(data.saved);
+                })
+                .catch(error => console.error('Error checking saved status:', error));
+        }
+        
+        // Toggle save job
+        function saveJob() {
+            const saveBtn = document.getElementById('saveJobBtn');
+            saveBtn.disabled = true;
+            
+            fetch(`/saved-jobs/${jobId}/save`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': document.querySelector('input[name="_csrf"]')?.value || ''
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateSaveButton(data.saved);
+                    showMessage(data.message, 'success');
+                } else {
+                    showMessage(data.error || 'Failed to save job', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('Failed to save job', 'error');
+            })
+            .finally(() => {
+                saveBtn.disabled = false;
+            });
+        }
+        
+        // Update save button appearance
+        function updateSaveButton(isSaved) {
+            const saveBtn = document.getElementById('saveJobBtn');
+            const saveText = document.getElementById('saveJobText');
+            
+            if (isSaved) {
+                saveBtn.classList.add('saved');
+                saveText.textContent = 'Saved';
+            } else {
+                saveBtn.classList.remove('saved');
+                saveText.textContent = 'Save Job';
+            }
+        }
+        
+        // Show message notification
+        function showMessage(message, type) {
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+            const alertHTML = `
+                <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            
+            const container = document.querySelector('.container');
+            const alertDiv = document.createElement('div');
+            alertDiv.innerHTML = alertHTML;
+            container.insertBefore(alertDiv.firstElementChild, container.firstChild);
+            
+            // Auto-dismiss after 4 seconds
+            setTimeout(() => {
+                const alert = document.querySelector('.alert');
+                if (alert) alert.remove();
+            }, 4000);
+        }
+        
+        // Add click handler to save button
+        document.addEventListener('DOMContentLoaded', function() {
+            const saveBtn = document.getElementById('saveJobBtn');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', saveJob);
+            }
+        });
+    </script>
 </body>
 </html>
