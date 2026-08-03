@@ -426,3 +426,47 @@ public class JobController {
         }
     }
 }
+
+    /**
+     * Close/Cancel a job posting
+     * POST /jobs/{jobId}/close
+     */
+    @PostMapping("/{jobId}/close")
+    public String closeJob(@PathVariable Long jobId,
+                          Authentication authentication,
+                          RedirectAttributes redirectAttributes) {
+        
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/auth/login";
+        }
+        
+        try {
+            User client = userService.findByEmail(authentication.getName());
+            
+            if (client == null || !client.isClient()) {
+                redirectAttributes.addFlashAttribute("error", "Only clients can close jobs");
+                return "redirect:/jobs/" + jobId;
+            }
+            
+            // Get job and verify ownership
+            Job job = jobService.getJobById(jobId);
+            
+            if (!job.getClient().getId().equals(client.getId())) {
+                redirectAttributes.addFlashAttribute("error", "You don't have permission to close this job");
+                return "redirect:/jobs/" + jobId;
+            }
+            
+            // Close the job
+            job.markCancelled();
+            jobService.updateJob(job);
+            
+            redirectAttributes.addFlashAttribute("success", "Job closed successfully. No more applications will be accepted.");
+            
+            return "redirect:/jobs/my-jobs";
+            
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error closing job: " + e.getMessage());
+            return "redirect:/jobs/" + jobId;
+        }
+    }
+}
