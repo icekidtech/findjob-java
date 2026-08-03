@@ -75,13 +75,13 @@ public class Job {
     @Column(nullable = false)
     private BudgetType budgetType; // FIXED or HOURLY
     
-    @DecimalMin(value = "0.1", message = "Minimum budget must be greater than 0")
-    @Column(nullable = false, precision = 12, scale = 2)
-    private BigDecimal budgetMin;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Currency currency = Currency.NGN; // Currency for budget (default: Nigerian Naira)
     
-    @DecimalMin(value = "0.1", message = "Maximum budget must be greater than 0")
+    @DecimalMin(value = "0.1", message = "Budget must be greater than 0")
     @Column(nullable = false, precision = 12, scale = 2)
-    private BigDecimal budgetMax;
+    private BigDecimal budgetAmount;
     
     // ==========================================
     // Job Duration & Deadline
@@ -99,12 +99,15 @@ public class Job {
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private JobStatus jobStatus = JobStatus.OPEN; // OPEN, IN_PROGRESS, COMPLETED, CANCELLED
     
     @Column(nullable = false)
+    @Builder.Default
     private Boolean isPublished = true; // Whether job is visible to freelancers
     
     @Column(nullable = false)
+    @Builder.Default
     private Boolean isFeatured = false; // Highlighted in search
     
     // ==========================================
@@ -112,12 +115,15 @@ public class Job {
     // ==========================================
     
     @Column(nullable = false)
+    @Builder.Default
     private Integer viewsCount = 0;
     
     @Column(nullable = false)
+    @Builder.Default
     private Integer applicationsCount = 0;
     
     @Column(nullable = false)
+    @Builder.Default
     private Integer savesCount = 0;
     
     // ==========================================
@@ -239,9 +245,9 @@ public class Job {
     }
     
     /**
-     * Get budget range as string
+     * Get budget as string with currency
      */
-    public String getBudgetRange() {
-        return "$" + budgetMin + " - $" + budgetMax;
+    public String getBudgetDisplay() {
+        return currency.getSymbol() + budgetAmount;
     }
 }

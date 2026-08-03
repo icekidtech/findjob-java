@@ -69,6 +69,12 @@ public class SecurityConfig {
                         .logoutUrl("/auth/logout")
                         .logoutSuccessUrl("/")
                         .permitAll()
+                )
+                .sessionManagement(session -> session
+                        .sessionConcurrency(concurrency -> concurrency
+                                .maximumSessions(1)
+                                .expiredUrl("/auth/login")
+                        )
                 );
 
         return http.build();

@@ -88,7 +88,7 @@ public class JobController {
      * View job details
      */
     @GetMapping("/{id}")
-    public String viewJob(@PathVariable Long id, Model model) {
+    public String viewJob(@PathVariable Long id, Authentication authentication, Model model) {
         try {
             Job job = jobService.getJobById(id);
             
@@ -100,9 +100,20 @@ public class JobController {
             // Increment views
             jobService.incrementViews(id);
             
+            // Add user role to model
+            String userRole = "GUEST";
+            if (authentication != null && authentication.isAuthenticated()) {
+                userRole = authentication.getAuthorities().stream()
+                        .map(auth -> auth.getAuthority())
+                        .filter(auth -> auth.startsWith("ROLE_"))
+                        .findFirst()
+                        .orElse("GUEST");
+            }
+            
             model.addAttribute("title", job.getTitle());
             model.addAttribute("job", job);
             model.addAttribute("client", job.getClient());
+            model.addAttribute("userRole", userRole);
             
             return "jobs/detail";
             
@@ -160,24 +171,45 @@ public class JobController {
             Model model,
             RedirectAttributes redirectAttributes) {
         
+        System.out.println("=== JOB POSTING ATTEMPT ===");
+        System.out.println("Authentication: " + (authentication != null ? authentication.getName() : "NULL"));
+        System.out.println("Is Authenticated: " + (authentication != null && authentication.isAuthenticated()));
+        
         if (authentication == null || !authentication.isAuthenticated()) {
+            System.out.println("ERROR: User not authenticated!");
             return "redirect:/auth/login";
         }
         
         try {
+            System.out.println("Fetching user by email: " + authentication.getName());
             User client = userService.findByEmail(authentication.getName());
             
+            System.out.println("User found: " + (client != null ? client.getEmail() : "NULL"));
+            if (client != null) {
+                System.out.println("User ID: " + client.getId());
+                System.out.println("Is Client: " + client.isClient());
+            }
+            
             if (client == null || !client.isClient()) {
+                System.out.println("ERROR: User is null or not a client!");
                 redirectAttributes.addFlashAttribute("error", "Only clients can post jobs");
                 return "redirect:/dashboard";
             }
             
             if (bindingResult.hasErrors()) {
+                System.out.println("ERROR: Binding result has errors!");
+                bindingResult.getAllErrors().forEach(error -> 
+                    System.out.println("  - " + error.getDefaultMessage())
+                );
                 model.addAttribute("title", "Post a Job");
                 model.addAttribute("budgetTypes", BudgetType.values());
                 model.addAttribute("experienceLevels", JobExperienceLevel.values());
                 return "jobs/post";
             }
+            
+            System.out.println("Creating job with title: " + jobDTO.getTitle());
+            System.out.println("Budget: " + jobDTO.getBudget() + " " + jobDTO.getCurrency() + " (" + jobDTO.getBudgetType() + ")");
+            System.out.println("Experience Level: " + jobDTO.getExperienceLevel());
             
             // Create job from DTO
             Job job = Job.builder()
@@ -186,16 +218,18 @@ public class JobController {
                 .description(jobDTO.getDescription())
                 .category(jobDTO.getCategory())
                 .budgetType(BudgetType.valueOf(jobDTO.getBudgetType()))
-                .budgetMin(jobDTO.getBudgetMin())
-                .budgetMax(jobDTO.getBudgetMax())
+                .currency(Currency.valueOf(jobDTO.getCurrency()))
+                .budgetAmount(jobDTO.getBudget())
                 .experienceLevel(JobExperienceLevel.valueOf(jobDTO.getExperienceLevel()))
-                .duration(jobDTO.getDuration())
-                .deadline(jobDTO.getDeadline())
                 .isPublished(true)
                 .jobStatus(JobStatus.OPEN)
                 .build();
             
+            System.out.println("Saving job to database...");
             Job savedJob = jobService.createJob(job);
+            
+            System.out.println("Job saved successfully! Job ID: " + savedJob.getId());
+            System.out.println("Redirecting to: /jobs/" + savedJob.getId());
             
             redirectAttributes.addFlashAttribute("success", 
                 "Job posted successfully! Check out your job dashboard.");
@@ -203,6 +237,8 @@ public class JobController {
             return "redirect:/jobs/" + savedJob.getId();
             
         } catch (Exception e) {
+            System.out.println("ERROR during job posting: " + e.getMessage());
+            e.printStackTrace();
             model.addAttribute("error", "Failed to post job: " + e.getMessage());
             model.addAttribute("title", "Post a Job");
             return "jobs/post";
@@ -251,9 +287,71 @@ public class JobController {
     }
     
     /**
-     * View applications for a job
+     * Apply for a job (Show application form)
      */
-    @GetMapping("/{jobId}/applications")
+    @GetMapping("/{jobId}/apply")
+    public String showApplyForm(@PathVariable Long jobId, Authentication authentication, Model model) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/auth/login";
+        }
+        
+        try {
+            Job job = jobService.getJobById(jobId);
+            User freelancer = userService.findByEmail(authentication.getName());
+            
+            if (!freelancer.isFreelancer()) {
+                model.addAttribute("error", "Only freelancers can apply for jobs");
+                return "redirect:/jobs/" + jobId;
+            }
+            
+            model.addAttribute("job", job);
+            model.addAttribute("freelancer", freelancer);
+            return "jobs/apply";
+            
+        } catch (Exception e) {
+            model.addAttribute("error", "Error loading job: " + e.getMessage());
+            return "error/error";
+        }
+    }
+    
+    /**
+     * Submit job application
+     */
+    @PostMapping("/{jobId}/apply")
+    public String submitApplication(@PathVariable Long jobId,
+                                   @RequestParam String proposalMessage,
+                                   Authentication authentication,
+                                   RedirectAttributes redirectAttributes) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/auth/login";
+        }
+        
+        try {
+            Job job = jobService.getJobById(jobId);
+            User freelancer = userService.findByEmail(authentication.getName());
+            
+            if (!freelancer.isFreelancer()) {
+                redirectAttributes.addFlashAttribute("error", "Only freelancers can apply for jobs");
+                return "redirect:/jobs/" + jobId;
+            }
+            
+            // Create and submit application
+            JobApplication application = new JobApplication();
+            application.setJob(job);
+            application.setFreelancer(freelancer);
+            application.setProposalMessage(proposalMessage);
+            
+            applicationService.submitApplication(application);
+            
+            redirectAttributes.addFlashAttribute("success", "Application submitted successfully!");
+            return "redirect:/jobs/" + jobId;
+            
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to submit application: " + e.getMessage());
+            return "redirect:/jobs/" + jobId;
+        }
+    }
+    
     public String viewApplications(
             @PathVariable Long jobId,
             Authentication authentication,
