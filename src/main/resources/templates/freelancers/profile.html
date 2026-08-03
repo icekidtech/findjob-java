@@ -643,7 +643,7 @@
             <a th:href="@{/freelancers}" class="btn-action btn-secondary">
                 <i class="fas fa-arrow-left"></i> Back to List
             </a>
-            <a href="#" class="btn-action btn-primary">
+            <a th:href="@{'mailto:' + ${freelancer.email}}" class="btn-action btn-primary">
                 <i class="fas fa-envelope"></i> Send Message
             </a>
             <a href="#" class="btn-action btn-primary">
