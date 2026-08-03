@@ -56,15 +56,11 @@ public class JobApplication {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String coverLetter; // Freelancer's proposal message
     
-    @DecimalMin(value = "0.1", message = "Proposed budget must be greater than 0")
-    @Column(precision = 12, scale = 2)
-    private BigDecimal proposedBudget; // What freelancer will charge
-    
-    @Column(length = 100)
-    private String proposedTimeline; // e.g., "2 weeks", "1 month"
+    @Column(length = 500)
+    private String cvFileUrl; // URL to uploaded CV/Resume file
     
     @Column(length = 500)
-    private String attachmentUrl; // Portfolio or work sample URL
+    private String portfolioUrl; // Link to freelancer's portfolio
     
     // ==========================================
     // Application Status

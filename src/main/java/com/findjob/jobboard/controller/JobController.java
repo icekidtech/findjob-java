@@ -338,7 +338,8 @@ public class JobController {
     @PostMapping("/{jobId}/apply")
     public String submitApplication(@PathVariable Long jobId,
                                    @RequestParam String coverLetter,
-                                   @RequestParam(required = false) String attachmentUrl,
+                                   @RequestParam(required = false) String cvFileUrl,
+                                   @RequestParam(required = false) String portfolioUrl,
                                    Authentication authentication,
                                    RedirectAttributes redirectAttributes) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -359,7 +360,8 @@ public class JobController {
             application.setJob(job);
             application.setFreelancer(freelancer);
             application.setCoverLetter(coverLetter);
-            application.setAttachmentUrl(attachmentUrl);
+            application.setCvFileUrl(cvFileUrl);
+            application.setPortfolioUrl(portfolioUrl);
             
             applicationService.submitApplication(application);
             

@@ -129,9 +129,8 @@ public class ApplicationController {
                 .job(job)
                 .freelancer(freelancer)
                 .coverLetter(applicationDTO.getCoverLetter())
-                .proposedBudget(applicationDTO.getProposedBudget())
-                .proposedTimeline(applicationDTO.getProposedTimeline())
-                .attachmentUrl(applicationDTO.getAttachmentUrl())
+                .cvFileUrl(applicationDTO.getCvFileUrl())
+                .portfolioUrl(applicationDTO.getPortfolioUrl())
                 .applicationStatus(ApplicationStatus.PENDING)
                 .build();
             
