@@ -425,8 +425,7 @@ public class JobController {
             return "error/error";
         }
     }
-}
-
+    
     /**
      * Close/Cancel a job posting
      * POST /jobs/{jobId}/close
