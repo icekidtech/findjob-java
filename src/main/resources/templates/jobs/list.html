@@ -325,50 +325,50 @@
                         <!-- Job Header -->
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
-                                <h3 class="job-title" th:text="${job.getTitle()}">Job Title</h3>
+                                <h3 class="job-title" th:text="${job.title}">Job Title</h3>
                                 <p class="job-client">
                                     <i class="fas fa-user"></i> 
-                                    <span th:text="${job.getClient().getFirstName() + ' ' + job.getClient().getLastName()}">Client Name</span>
+                                    <span th:text="${job.client.firstName + ' ' + job.client.lastName}">Client Name</span>
                                 </p>
                             </div>
-                            <span class="job-status-badge" th:classappend="${job.getStatus().toString() == 'OPEN' ? 'status-active' : 'status-closed'}" th:text="${job.getStatus()}">Status</span>
+                            <span class="job-status-badge" th:classappend="${job.jobStatus.toString() == 'OPEN' ? 'status-active' : 'status-closed'}" th:text="${job.jobStatus}">Status</span>
                         </div>
 
                         <!-- Description -->
-                        <p class="job-description" th:text="${#strings.abbreviate(job.getDescription(), 150)}">Job description goes here...</p>
+                        <p class="job-description" th:text="${#strings.abbreviate(job.description, 150)}">Job description goes here...</p>
 
                         <!-- Meta Information -->
                         <div class="job-meta">
                             <div class="meta-item">
                                 <i class="fas fa-coins meta-icon"></i>
-                                <span th:text="${job.getBudgetType() == 'FIXED' ? '$' + job.getBudget() : '$' + job.getHourlyRate() + '/hr'}">Budget</span>
+                                <span th:text="${job.currency.symbol} + ' ' + ${job.budgetAmount}">Budget</span>
                             </div>
                             <div class="meta-item">
                                 <i class="fas fa-briefcase meta-icon"></i>
-                                <span th:text="${job.getExperienceLevel()}">Level</span>
+                                <span th:text="${job.experienceLevel}">Level</span>
                             </div>
                             <div class="meta-item">
                                 <i class="fas fa-calendar meta-icon"></i>
-                                <span th:text="${#temporals.format(job.getCreatedAt(), 'MMM dd, yyyy')}">Date</span>
+                                <span th:text="${#temporals.format(job.postedAt, 'MMM dd, yyyy')}">Date</span>
                             </div>
                             <div class="meta-item">
                                 <i class="fas fa-users meta-icon"></i>
-                                <span th:text="${job.getApplications().size()} + ' applications'">0 applications</span>
+                                <span th:text="${job.applicationsCount} + ' proposals'">0 proposals</span>
                             </div>
                         </div>
 
-                        <!-- Skills -->
+                        <!-- Category -->
                         <div class="mb-3">
-                            <span class="skill-badge" th:each="skill : ${job.getRequiredSkills()}" th:text="${skill.getSkillName()}">Skill</span>
+                            <span class="skill-badge" th:text="${job.category}">Category</span>
                         </div>
 
                         <!-- Footer with CTA -->
                         <div class="job-footer">
                             <small class="text-muted">
-                                <i class="fas fa-map-marker-alt"></i> 
-                                <span th:text="${job.getLocation() != null ? job.getLocation() : 'Remote'}">Location</span>
+                                <i class="fas fa-briefcase"></i> 
+                                <span th:text="${job.budgetType}">Type</span>
                             </small>
-                            <a th:href="@{'/jobs/' + ${job.getId()}}" class="btn-view">
+                            <a th:href="@{'/jobs/' + ${job.id}}" class="btn-view">
                                 <i class="fas fa-arrow-right"></i> View Details
                             </a>
                         </div>
