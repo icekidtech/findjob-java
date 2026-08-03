@@ -93,7 +93,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     /**
      * Find jobs within budget range
      */
-    @Query("SELECT j FROM Job j WHERE j.isPublished = true AND j.jobStatus = 'OPEN' AND j.budgetMin >= :minBudget AND j.budgetMax <= :maxBudget")
+    @Query("SELECT j FROM Job j WHERE j.isPublished = true AND j.jobStatus = 'OPEN' AND j.budgetAmount BETWEEN :minBudget AND :maxBudget")
     List<Job> findByBudgetRange(@Param("minBudget") BigDecimal minBudget, @Param("maxBudget") BigDecimal maxBudget);
     
     /**
