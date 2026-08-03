@@ -12,6 +12,7 @@ import java.util.Map;
 
 /**
  * CloudinaryService - Handles file uploads to Cloudinary
+ * NOTE: This service is deprecated. Use FileStorageService for local file storage instead.
  */
 @Service
 public class CloudinaryService {
@@ -19,14 +20,19 @@ public class CloudinaryService {
     private final Cloudinary cloudinary;
     
     public CloudinaryService(
-            @Value("${cloudinary.cloud-name}") String cloudName,
-            @Value("${cloudinary.api-key}") String apiKey,
-            @Value("${cloudinary.api-secret}") String apiSecret) {
-        this.cloudinary = new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", cloudName,
-                "api_key", apiKey,
-                "api_secret", apiSecret
-        ));
+            @Value("${cloudinary.cloud-name:}") String cloudName,
+            @Value("${cloudinary.api-key:}") String apiKey,
+            @Value("${cloudinary.api-secret:}") String apiSecret) {
+        // If credentials are empty, create a dummy instance (won't be used)
+        if (cloudName == null || cloudName.isEmpty()) {
+            this.cloudinary = null;
+        } else {
+            this.cloudinary = new Cloudinary(ObjectUtils.asMap(
+                    "cloud_name", cloudName,
+                    "api_key", apiKey,
+                    "api_secret", apiSecret
+            ));
+        }
     }
     
     /**

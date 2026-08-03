@@ -152,7 +152,7 @@ public class ApplicationService {
         JobApplication application = applicationRepository.findById(applicationId)
             .orElseThrow(() -> new IllegalArgumentException("Application not found"));
         
-        application.setStatus(ApplicationStatus.ACCEPTED);
+        application.accept();
         return applicationRepository.save(application);
     }
     
@@ -163,7 +163,7 @@ public class ApplicationService {
         JobApplication application = applicationRepository.findById(applicationId)
             .orElseThrow(() -> new IllegalArgumentException("Application not found"));
         
-        application.setStatus(ApplicationStatus.REJECTED);
+        application.reject("Application declined by client");
         return applicationRepository.save(application);
     }
     

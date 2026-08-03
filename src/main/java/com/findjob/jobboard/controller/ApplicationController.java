@@ -1,6 +1,7 @@
 package com.findjob.jobboard.controller;
 
 import com.findjob.jobboard.model.ApplicationStatus;
+import com.findjob.jobboard.model.Job;
 import com.findjob.jobboard.model.JobApplication;
 import com.findjob.jobboard.model.User;
 import com.findjob.jobboard.service.ApplicationService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * ApplicationController - Handles job applications management
@@ -60,8 +62,7 @@ public class ApplicationController {
             }
             
             // Get job and verify ownership
-            var job = jobService.getJobById(jobId)
-                    .orElse(null);
+            Job job = jobService.getJobById(jobId);
             
             if (job == null || !job.getClient().getId().equals(currentUser.getId())) {
                 model.addAttribute("error", "You don't have permission to view these applications");
@@ -186,8 +187,7 @@ public class ApplicationController {
             }
             
             // Accept application
-            application.accept();
-            applicationService.updateApplication(application);
+            applicationService.acceptApplication(applicationId);
             
             redirectAttributes.addFlashAttribute("success", "Application accepted! You can now contact the freelancer.");
             return "redirect:/applications/" + applicationId;
@@ -234,8 +234,7 @@ public class ApplicationController {
             }
             
             // Decline application
-            application.reject("Application declined by client");
-            applicationService.updateApplication(application);
+            applicationService.declineApplication(applicationId);
             
             redirectAttributes.addFlashAttribute("success", "Application declined.");
             return "redirect:/applications/job/" + application.getJob().getId();
