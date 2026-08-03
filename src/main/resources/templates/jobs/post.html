@@ -408,13 +408,13 @@
                                 <label for="budget" class="form-label">Budget *</label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="currencySymbol">₦</span>
-                                    <input type="number" class="form-control" id="budget" name="budgetMin" 
+                                    <input type="number" class="form-control" id="budget" name="budget" 
                                            placeholder="50000" min="0.1" step="0.01"
-                                           th:value="*{budgetMin}" required>
+                                           th:value="*{budget}" required>
                                 </div>
                                 <small class="text-muted">Total project budget</small>
-                                <div th:if="${#fields.hasErrors('budgetMin')}" class="text-danger small mt-1">
-                                    <i class="fas fa-times-circle"></i> <span th:errors="*{budgetMin}"></span>
+                                <div th:if="${#fields.hasErrors('budget')}" class="text-danger small mt-1">
+                                    <i class="fas fa-times-circle"></i> <span th:errors="*{budget}"></span>
                                 </div>
                             </div>
                         </div>
@@ -425,14 +425,14 @@
                                 <label for="budgetHourly" class="form-label">Hourly Rate *</label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="currencySymbolHourly">₦</span>
-                                    <input type="number" class="form-control" id="budgetHourly" name="budgetMin" 
+                                    <input type="number" class="form-control" id="budgetHourly" name="budget" 
                                            placeholder="5000" min="0.1" step="0.01"
-                                           th:value="*{budgetMin}" required>
+                                           th:value="*{budget}" required>
                                     <span class="input-group-text">/hr</span>
                                 </div>
                                 <small class="text-muted">Rate per hour</small>
-                                <div th:if="${#fields.hasErrors('budgetMin')}" class="text-danger small mt-1">
-                                    <i class="fas fa-times-circle"></i> <span th:errors="*{budgetMin}"></span>
+                                <div th:if="${#fields.hasErrors('budget')}" class="text-danger small mt-1">
+                                    <i class="fas fa-times-circle"></i> <span th:errors="*{budget}"></span>
                                 </div>
                             </div>
                         </div>
@@ -447,24 +447,6 @@
                                 <option value="EXPERT">Expert</option>
                             </select>
                             <small class="helper-text">This helps attract freelancers with the right skill level</small>
-                        </div>
-                    </div>
-
-                    <!-- Timeline Section -->
-                    <div class="form-card">
-                        <h3 class="section-title">
-                            <i class="fas fa-calendar"></i> Timeline
-                        </h3>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <label for="startDate" class="form-label">Desired Start Date *</label>
-                                <input type="date" class="form-control" id="startDate" name="startDate" required>
-                            </div>
-                            <div class="col-md-6 mb-4">
-                                <label for="deadline" class="form-label">Deadline *</label>
-                                <input type="datetime-local" class="form-control" id="deadline" name="deadline" required>
-                            </div>
                         </div>
                     </div>
 
@@ -605,6 +587,11 @@
                 document.getElementById('skillsList').appendChild(skillTag);
                 input.value = '';
             }
+        });
+        
+        // Form submission logging
+        document.getElementById('jobForm').addEventListener('submit', function(e) {
+            console.log('Job form submitted successfully');
         });
     </script>
 </body>

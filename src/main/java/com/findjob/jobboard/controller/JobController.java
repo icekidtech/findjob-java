@@ -197,7 +197,7 @@ public class JobController {
             }
             
             System.out.println("Creating job with title: " + jobDTO.getTitle());
-            System.out.println("Budget: " + jobDTO.getBudgetMin() + " " + jobDTO.getCurrency() + " (" + jobDTO.getBudgetType() + ")");
+            System.out.println("Budget: " + jobDTO.getBudget() + " " + jobDTO.getCurrency() + " (" + jobDTO.getBudgetType() + ")");
             System.out.println("Experience Level: " + jobDTO.getExperienceLevel());
             
             // Create job from DTO
@@ -208,11 +208,8 @@ public class JobController {
                 .category(jobDTO.getCategory())
                 .budgetType(BudgetType.valueOf(jobDTO.getBudgetType()))
                 .currency(Currency.valueOf(jobDTO.getCurrency()))
-                .budgetMin(jobDTO.getBudgetMin())
-                .budgetMax(jobDTO.getBudgetMin()) // Set to same value since we only have one budget field
+                .budgetAmount(jobDTO.getBudget())
                 .experienceLevel(JobExperienceLevel.valueOf(jobDTO.getExperienceLevel()))
-                .duration(jobDTO.getDuration())
-                .deadline(jobDTO.getDeadline())
                 .isPublished(true)
                 .jobStatus(JobStatus.OPEN)
                 .build();

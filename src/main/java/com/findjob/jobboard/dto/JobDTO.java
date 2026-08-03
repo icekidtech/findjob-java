@@ -6,10 +6,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * JobDTO - Data Transfer Object for Job creation/updates
@@ -35,19 +33,9 @@ public class JobDTO {
     @NotBlank(message = "Currency is required")
     private String currency; // USD, EUR, GBP, NGN, etc.
     
-    @DecimalMin(value = "0.1", message = "Minimum budget must be greater than 0")
-    private BigDecimal budgetMin;
-    
-    @DecimalMin(value = "0.1", message = "Maximum budget must be greater than 0")
-    private BigDecimal budgetMax;
+    @DecimalMin(value = "0.1", message = "Budget must be greater than 0")
+    private BigDecimal budget;
     
     @NotBlank(message = "Experience level is required")
-    private String experienceLevel; // ENTRY_LEVEL, INTERMEDIATE, EXPERT
-    
-    private String duration; // 1-3 months, 3-6 months, etc.
-    
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime deadline;
-    
-    private String attachmentUrl;
+    private String experienceLevel; // BEGINNER, INTERMEDIATE, EXPERT
 }
